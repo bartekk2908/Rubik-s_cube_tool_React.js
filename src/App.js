@@ -4,7 +4,7 @@ export default function App() {
     return (
         <>
             <ScrambleField n={20}/>
-            <TimerField/>
+            <Timer holdingSpaceTime={500}/>
         </>
     );
 }
@@ -41,10 +41,13 @@ function generateScramble(n) {
     return scramble;
 }
 
-function TimerField() {
+function Timer({ holdingSpaceTime }) {
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
     const [isRunning, setIsRunning] = useState(false);
+    const [spacePressed, setSpacePressed] = useState(false);
+    const [isReadyToStart, setIsReadyToStart] = useState(false);
+    const [myTimeout, setMyTimeout] = useState(null);
 
     const hours = Math.floor(time / 360_000);
     const minutes = Math.floor((time % 360_000) / 6_000);
@@ -59,23 +62,67 @@ function TimerField() {
         return () => clearInterval(intervalId);
     }, [isRunning, time])
 
-    function startAndStop() {
+    function startTimer() {
         if (!isRunning) {
-            resetTime();
+            resetTimer();
         }
-        setIsRunning(!isRunning);
+        setIsRunning(true);
+        setIsReadyToStart(false);
     }
 
-    function resetTime() {
+    function stopTimer() {
+        setIsRunning(false);
+    }
+
+    function resetTimer() {
         setTime(0);
     }
 
+    useEffect(() => {
+        if (spacePressed) {
+            if (isRunning) {
+                stopTimer();
+            } else {
+                setMyTimeout(setTimeout(() => {setIsReadyToStart(true);}, holdingSpaceTime));
+            }
+        } else {
+            if (!isRunning) {
+                clearTimeout(myTimeout);
+                if (isReadyToStart) {
+                    startTimer();
+                }
+            }
+        }
+    }, [spacePressed]);
+
+    useEffect(() => {
+        function handleKeyDown(event) {
+            if (event.key === ' ' && !event.repeat) {
+                setSpacePressed(true);
+            }
+        }
+        function handleKeyUp(event) {
+            if (event.key === ' ') {
+                setSpacePressed(false);
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, [])
+
     return (
         <>
-            <div>
-                {hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}` : (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}` : `${seconds}.${milliseconds.toString().padStart(2, '0')}` )}
+            <div style={{color: (spacePressed ? (isReadyToStart ? "green" : "red") : ""), fontWeight: "bold"}}>
+                {hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
+                    (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
+                        `${seconds}.`)}
+                {isRunning ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')}
             </div>
-            <button onClick={startAndStop}>{isRunning ? "Stop" : "Start"}</button>
+            <button onClick={isRunning ? stopTimer : startTimer}>{isRunning ? "Stop" : "Start"}</button>
         </>
     );
 }
