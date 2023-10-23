@@ -1,5 +1,5 @@
 
 - działanie aplikacji w tle
-- włączanie timera klawiszami klawiatury
+- zmiana struktury, znikanie scrambla w trakcie układania i następny scramble
 - baza danych z czasami
 
