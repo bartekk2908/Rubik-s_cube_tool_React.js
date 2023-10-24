@@ -3,22 +3,27 @@ import { useState, useEffect } from "react";
 export default function App() {
     return (
         <>
-            <ScrambleField n={20}/>
             <Timer holdingSpaceTime={500}/>
         </>
     );
 }
 
-function ScrambleField({ n }) {
+function ScrambleField({ n, isVisible }) {
     const [scrambleText, setScrambleText] = useState(generateScramble(n));
 
+    useEffect(() => {
+        setScrambleText(generateScramble(n));
+    }, [isVisible])
+
     return (
+        isVisible ? (
         <>
             <div>
                 <button onClick={() => setScrambleText(generateScramble(n))}>next scramble</button>
             </div>
             <div>{scrambleText}</div>
         </>
+        ) : " "
     );
 }
 
@@ -116,13 +121,14 @@ function Timer({ holdingSpaceTime }) {
 
     return (
         <>
+            <ScrambleField n={20} isVisible={!isRunning && !isReadyToStart}/>
             <div style={{color: (spacePressed ? (isReadyToStart ? "green" : "red") : ""), fontWeight: "bold"}}>
                 {hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
                     (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
                         `${seconds}.`)}
                 {isRunning ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')}
             </div>
-            <button onClick={isRunning ? stopTimer : startTimer}>{isRunning ? "Stop" : "Start"}</button>
+            {/* <button onClick={isRunning ? stopTimer : startTimer}>{isRunning ? "Stop" : "Start"}</button> */}
         </>
     );
 }
