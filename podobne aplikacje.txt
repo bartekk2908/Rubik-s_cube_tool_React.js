@@ -1,0 +1,14 @@
+Webowe:
+csTimer : dane lokalnie (można zrobić kopię zapasową, logowanie do wca i inne), dużo opcji, kostek, narzędzi, personalizacja,
+lista, sesje, 
+
+
+Mobilne:
+Cube Timer : dane lokalnie (można exportować/importować do pliku), lista, wykresy, reklamy, informacje o zawodach, opcje, oficjalne kostki
+
+
+
+
+
+
+

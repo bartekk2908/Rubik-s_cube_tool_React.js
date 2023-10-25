@@ -13,7 +13,7 @@ function ScrambleField({ n, isVisible }) {
 
     useEffect(() => {
         setScrambleText(generateScramble(n));
-    }, [isVisible])
+    }, [isVisible]);
 
     return (
         isVisible ? (
@@ -52,7 +52,8 @@ function Timer({ holdingSpaceTime }) {
     const [isRunning, setIsRunning] = useState(false);
     const [spacePressed, setSpacePressed] = useState(false);
     const [isReadyToStart, setIsReadyToStart] = useState(false);
-    const [myTimeout, setMyTimeout] = useState(null);
+    const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
+    const [startTime, setStartTime] = useState(Date.now());
 
     const hours = Math.floor(time / 360_000);
     const minutes = Math.floor((time % 360_000) / 6_000);
@@ -62,10 +63,10 @@ function Timer({ holdingSpaceTime }) {
     useEffect(() => {
         let intervalId;
         if (isRunning) {
-            intervalId = setInterval(() => setTime(time + 1), 10);
+            intervalId = setInterval(() => setTime(Math.floor((Date.now() - startTime)/10)), 10);
         }
         return () => clearInterval(intervalId);
-    }, [isRunning, time])
+    }, [isRunning, time]);
 
     function startTimer() {
         if (!isRunning) {
@@ -73,6 +74,7 @@ function Timer({ holdingSpaceTime }) {
         }
         setIsRunning(true);
         setIsReadyToStart(false);
+        setStartTime(Date.now());
     }
 
     function stopTimer() {
@@ -88,11 +90,11 @@ function Timer({ holdingSpaceTime }) {
             if (isRunning) {
                 stopTimer();
             } else {
-                setMyTimeout(setTimeout(() => {setIsReadyToStart(true);}, holdingSpaceTime));
+                setHoldingSpaceTimeout(setTimeout(() => {setIsReadyToStart(true);}, holdingSpaceTime));
             }
         } else {
             if (!isRunning) {
-                clearTimeout(myTimeout);
+                clearTimeout(holdingSpaceTimeout);
                 if (isReadyToStart) {
                     startTimer();
                 }
@@ -117,16 +119,15 @@ function Timer({ holdingSpaceTime }) {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
         };
-    }, [])
+    }, []);
 
     return (
         <>
             <ScrambleField n={20} isVisible={!isRunning && !isReadyToStart}/>
             <div style={{color: (spacePressed ? (isReadyToStart ? "green" : "red") : ""), fontWeight: "bold"}}>
-                {hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
+                {isReadyToStart ? "0.0" : (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
                     (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
-                        `${seconds}.`)}
-                {isRunning ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')}
+                        `${seconds}.`) + (isRunning ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')))}
             </div>
             {/* <button onClick={isRunning ? stopTimer : startTimer}>{isRunning ? "Stop" : "Start"}</button> */}
         </>
