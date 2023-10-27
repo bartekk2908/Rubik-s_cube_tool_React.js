@@ -1,5 +1,10 @@
-.App {
+.Timer {
   text-align: center;
+  margin-top: 60px;
+}
+
+body {
+  background-color: lightgray;
 }
 
 .App-logo {

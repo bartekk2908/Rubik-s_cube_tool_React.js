@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import Dexie from "dexie";
+import './App.css';
 
 export default function App() {
     return (
-        <>
+        <div className="Timer">
             <Timer holdingSpaceTime={500}/>
-        </>
+        </div>
     );
 }
 
@@ -49,68 +51,86 @@ function generateScramble(n) {
 function Timer({ holdingSpaceTime }) {
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
-    const [isRunning, setIsRunning] = useState(false);
-    const [spacePressed, setSpacePressed] = useState(false);
-    const [isReadyToStart, setIsReadyToStart] = useState(false);
-    const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
     const [startTime, setStartTime] = useState(Date.now());
+
+    const [timerState, setTimerState] = useState(0);
+    // 0 - normal state
+    // 1 - is ready to start preinspection (holding space but do not have to)
+    // 2 - preinspection time
+    // 3 - is ready to start timer (holding space)
+    // 4 - timer is running / solving time
+
+    const [spacePressed, setSpacePressed] = useState(false);
+    const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
+    const [escPressed, setEscPressed] = useState(false);
+
+    const [withPreinspection, setWithPreinspection] = useState(false);
 
     const hours = Math.floor(time / 360_000);
     const minutes = Math.floor((time % 360_000) / 6_000);
     const seconds = Math.floor((time % 6_000) / 100);
     const milliseconds = Math.floor(time % 100);
 
+    // running timer
     useEffect(() => {
         let intervalId;
-        if (isRunning) {
+        if (timerState === 4) {
             intervalId = setInterval(() => setTime(Math.floor((Date.now() - startTime)/10)), 10);
+        } else if (timerState) {
+            intervalId = setInterval(() => setTime(), 10)
         }
         return () => clearInterval(intervalId);
-    }, [isRunning, time]);
+    }, [timerState, time]);
 
     function startTimer() {
-        if (!isRunning) {
-            resetTimer();
-        }
-        setIsRunning(true);
-        setIsReadyToStart(false);
+        resetTimer();
+        setTimerState(4);
         setStartTime(Date.now());
     }
 
     function stopTimer() {
-        setIsRunning(false);
+        setTimerState(0);
     }
 
     function resetTimer() {
         setTime(0);
     }
 
+    // operations when spacePressed status is changed
     useEffect(() => {
         if (spacePressed) {
-            if (isRunning) {
+            if (timerState === 4) {
                 stopTimer();
-            } else {
-                setHoldingSpaceTimeout(setTimeout(() => {setIsReadyToStart(true);}, holdingSpaceTime));
+            } else if (timerState === 0 && withPreinspection) {
+                setTimerState(1);
+            } else if ((timerState === 0 && !withPreinspection) || timerState === 2) {
+                setHoldingSpaceTimeout(setTimeout(() => {setTimerState(3);}, holdingSpaceTime));
             }
         } else {
-            if (!isRunning) {
-                clearTimeout(holdingSpaceTimeout);
-                if (isReadyToStart) {
-                    startTimer();
-                }
+            clearTimeout(holdingSpaceTimeout);
+            if (timerState === 1) {
+                setTimerState(2);
+            } else if (timerState === 3) {
+                startTimer();
             }
         }
     }, [spacePressed]);
 
+    // handling keyDown and keyUp
     useEffect(() => {
         function handleKeyDown(event) {
             if (event.key === ' ' && !event.repeat) {
                 setSpacePressed(true);
+            } else if (event.key === 'Escape' && !event.repeat) {
+                setEscPressed(true);
             }
         }
         function handleKeyUp(event) {
             if (event.key === ' ') {
                 setSpacePressed(false);
+            }
+            else if (event.key === 'Escape') {
+                setEscPressed(false);
             }
         }
         window.addEventListener('keydown', handleKeyDown);
@@ -121,15 +141,21 @@ function Timer({ holdingSpaceTime }) {
         };
     }, []);
 
+    function changePreinspectionState() {
+        setWithPreinspection(!withPreinspection);
+    }
+
     return (
         <>
-            <ScrambleField n={20} isVisible={!isRunning && !isReadyToStart}/>
-            <div style={{color: (spacePressed ? (isReadyToStart ? "green" : "red") : ""), fontWeight: "bold"}}>
-                {isReadyToStart ? "0.0" : (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
+            <ScrambleField n={20} isVisible={timerState === 0}/>
+            <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
+                {timerState === 3 && !withPreinspection ? "0.0" : (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
                     (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
-                        `${seconds}.`) + (isRunning ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')))}
+                        `${seconds}.`) + (timerState === 4 ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0')))}
             </div>
-            {/* <button onClick={isRunning ? stopTimer : startTimer}>{isRunning ? "Stop" : "Start"}</button> */}
+            {/* <button onClick={timerState === 4 ? stopTimer : startTimer}>{timerState === 4 ? "Stop" : "Start"}</button> */}
+            {timerState === 0 ? (<><input type="checkbox" checked={withPreinspection} onChange={changePreinspectionState}/>preinspection</>) : ""}
+
         </>
     );
 }
