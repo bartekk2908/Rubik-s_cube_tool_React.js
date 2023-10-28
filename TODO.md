@@ -1,9 +1,12 @@
 
-- baza danych z czasami
-- liczenie średniej ao5
-- lista czasów
+- anulowanie preinspekcji esc
 
+- liczenie średniej ao5
+- best
+- modyfikacja/usuwanie rekordów na liście czasów
 - +2 i DNF
+- możliwość usunięcia wszystkich danych
+- możliwość exportu/importu danych
 
 - moduł uczenia się algorytmów
 - progressbar

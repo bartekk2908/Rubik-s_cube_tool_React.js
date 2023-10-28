@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import './App.css';
 import Dexie from "dexie";
+import {useLiveQuery} from "dexie-react-hooks";
 
 const db = new Dexie('SpeedCubeTool');
 db.version(1).stores({
@@ -30,8 +31,9 @@ function ScrambleField({ n, isVisible, getScramble }) {
     }, [isVisible]);
 
     function updateScramble() {
-        setScramble(generateScramble(n));
-        getScramble(scramble); // TO FIX
+        const scr = generateScramble(n);
+        setScramble(scr);
+        getScramble(scr);
     }
 
     return (
@@ -87,11 +89,12 @@ function Timer({ holdingSpaceTime }) {
     const [preinspectionTime, setPreinspectionTime] = useState(1500);
     const [preinspectionStartTime, setPreinspectionStartTime] = useState(Date.now());
     const [preinspectionState, setPreinspectionState] = useState(0);
-    // 0 - preinspection has started
-    // 1 - after 8 seconds
-    // 2 - after 12 seconds
-    // 3 - after 15 seconds (+2)
-    // 4 - after 17 seconds (DNF)
+    // 0 - no preinspection now
+    // 1 - preinspection has started
+    // 2 - after 8 seconds
+    // 3 - after 12 seconds
+    // 4 - after 15 seconds (+2)
+    // 5 - after 17 seconds (DNF)
 
     const hours = Math.floor(time / 360_000);
     const minutes = Math.floor((time % 360_000) / 6_000);
@@ -114,22 +117,23 @@ function Timer({ holdingSpaceTime }) {
             if (preinspectionTime > -200) {
                 intervalId = setInterval(() => setPreinspectionTime(Math.floor((15000 - (Date.now() - preinspectionStartTime)) / 10)), 10)
             }
-            if (preinspectionTime <= -200 && preinspectionState === 3) {
+            if (preinspectionTime <= -200 && preinspectionState === 4) {
+                setPreinspectionState(5);
+            } else if (preinspectionTime < 0 && preinspectionState === 3) {
                 setPreinspectionState(4);
-            } else if (preinspectionTime < 0 && preinspectionState === 2) {
+            } else if (preinspectionTime < 300 && preinspectionState === 2) {
                 setPreinspectionState(3);
-            } else if (preinspectionTime < 300 && preinspectionState === 1) {
+            } else if (preinspectionTime < 700 && preinspectionState === 1) {
                 setPreinspectionState(2);
-            } else if (preinspectionTime < 700 && preinspectionState === 0) {
-                setPreinspectionState(1);
             }
         }
         return () => clearInterval(intervalId);
-    }, [timerState, preinspectionTime])
+    }, [preinspectionState, preinspectionTime]);
 
     function startTimer() {
         resetTimer();
         setTimerState(4);
+        setPreinspectionState(0);
         setStartTime(Date.now());
     }
 
@@ -149,7 +153,6 @@ function Timer({ holdingSpaceTime }) {
                 plus_two,
                 dnf,
             });
-            console.log(scramble + ' ' + time);
         } catch (error) {
             console.log("Error: " + error);
         }
@@ -182,7 +185,7 @@ function Timer({ holdingSpaceTime }) {
 
     function startPreinspection() {
         resetPreinspection();
-        setPreinspectionState(0);
+        setPreinspectionState(1);
         setTimerState(2);
         setPreinspectionStartTime(Date.now());
     }
@@ -220,20 +223,58 @@ function Timer({ holdingSpaceTime }) {
         };
     }, []);
 
+    const preinspectionComs = [
+        " ",
+        " ",
+        "8!",
+        "12!",
+        "15!!!",
+        "17!!!",
+    ];
+
     return (
         <>
             <ScrambleField n={20} isVisible={timerState === 0} getScramble={getScramble}/>
             <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
-                {((timerState === 2 || (timerState === 3 && withPreinspection)) ? (preinspectionState < 3 ? Math.ceil(preinspectionTime/100) : (preinspectionState === 3 ? "+2" : "DNF")) :
+                {((timerState === 2 || (timerState === 3 && withPreinspection)) ? (preinspectionState < 4 ? Math.ceil(preinspectionTime/100) : (preinspectionState === 4 ? "+2" : "DNF")) :
                 ((timerState === 3 && !withPreinspection) || (timerState === 1 )) ? "0.0" :
                 (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
                 (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
                 `${seconds}.`) + (timerState === 4 ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0'))))}
             </div>
+            {preinspectionComs[preinspectionState]}
             {/* <button onClick={timerState === 4 ? stopTimer : startTimer}>{timerState === 4 ? "Stop" : "Start"}</button> */}
             {timerState === 0 ? (<><input type="checkbox" checked={withPreinspection} onChange={changePreinspection}/>preinspection</>) : ""}
-
+            {timerState === 0 ? (<TimesList/>) : ""}
         </>
     );
 }
 
+function TimesList() {
+    const times = useLiveQuery(
+        () => db.times.toArray()
+    );
+
+    return (
+        <ol style={{background: "grey", width: "300px", display: "flex", flexDirection: "column-reverse"}}>
+            {times?.map((times) => {
+                const time = times.time;
+                const hours = Math.floor(time / 360_000);
+                const minutes = Math.floor((time % 360_000) / 6_000);
+                const seconds = Math.floor((time % 6_000) / 100);
+                const milliseconds = Math.floor(time % 100);
+
+                return (
+                    <li>
+                        <button key={times.id} style={{width: "100px", }}>
+                            {(hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
+                            (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
+                            `${seconds}.`) + milliseconds.toString().padStart(2, '0'))}
+                        </button>
+                    </li>
+                );
+            }
+            )}
+        </ol>
+    );
+}
