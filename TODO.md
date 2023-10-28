@@ -3,7 +3,6 @@
 - liczenie średniej ao5
 - lista czasów
 
-- preispekcja 15s
 - +2 i DNF
 
 - moduł uczenia się algorytmów
