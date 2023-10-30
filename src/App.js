@@ -56,13 +56,16 @@ function generateScramble(n) {
     let lastFace = "";
     let nextToLastFace = "";
     for (let i = 0; i<n; i++) {
-    // choose again if: chosen face is the same as last face OR chosen face is the same as next to last face and last face is opposite face to chosen face
-    do {
-        face = faces[Math.floor(Math.random()*faces.length)];
-    } while (lastFace === face || (nextToLastFace === face && lastFace === (faces.indexOf(face)%2 ? faces[faces.indexOf(face)-1] : faces[faces.indexOf(face)+1])))
-    nextToLastFace = lastFace;
-    lastFace = face;
-    scramble += face + modifiers[Math.floor(Math.random()*modifiers.length)] + " ";
+        // choose again if:
+            // chosen face is the same as last face
+            // OR
+            // chosen face is the same as next to last face and last face is opposite face to chosen face
+        do {
+            face = faces[Math.floor(Math.random()*faces.length)];
+        } while (lastFace === face || (nextToLastFace === face && lastFace === (faces.indexOf(face)%2 ? faces[faces.indexOf(face)-1] : faces[faces.indexOf(face)+1])))
+        nextToLastFace = lastFace;
+        lastFace = face;
+        scramble += face + modifiers[Math.floor(Math.random()*modifiers.length)] + " ";
     }
     return scramble;
 }
@@ -145,6 +148,21 @@ function Timer({ holdingSpaceTime }) {
         setTime(0);
     }
 
+    function startPreinspection() {
+        resetPreinspection();
+        setPreinspectionState(1);
+        setTimerState(2);
+        setPreinspectionStartTime(Date.now());
+    }
+
+    function resetPreinspection() {
+        setPreinspectionTime(1500);
+    }
+
+    function changePreinspection() {
+        setWithPreinspection(!withPreinspection);
+    }
+
     async function addTimerRecord(plus_two, dnf) {
         try {
             const id = await db.times.add({
@@ -182,21 +200,6 @@ function Timer({ holdingSpaceTime }) {
             }
         }
     }, [spacePressed]);
-
-    function startPreinspection() {
-        resetPreinspection();
-        setPreinspectionState(1);
-        setTimerState(2);
-        setPreinspectionStartTime(Date.now());
-    }
-
-    function resetPreinspection() {
-        setPreinspectionTime(1500);
-    }
-
-    function changePreinspection() {
-        setWithPreinspection(!withPreinspection);
-    }
 
     // handling keyDown and keyUp
     useEffect(() => {
@@ -238,43 +241,98 @@ function Timer({ holdingSpaceTime }) {
             <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
                 {((timerState === 2 || (timerState === 3 && withPreinspection)) ? (preinspectionState < 4 ? Math.ceil(preinspectionTime/100) : (preinspectionState === 4 ? "+2" : "DNF")) :
                 ((timerState === 3 && !withPreinspection) || (timerState === 1 )) ? "0.0" :
-                (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
-                (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
-                `${seconds}.`) + (timerState === 4 ? Math.floor(milliseconds/10) : milliseconds.toString().padStart(2, '0'))))}
+                formatTime(time, (timerState !== 4)))}
             </div>
             {preinspectionComs[preinspectionState]}
             {/* <button onClick={timerState === 4 ? stopTimer : startTimer}>{timerState === 4 ? "Stop" : "Start"}</button> */}
             {timerState === 0 ? (<><input type="checkbox" checked={withPreinspection} onChange={changePreinspection}/>preinspection</>) : ""}
-            {timerState === 0 ? (<TimesList/>) : ""}
+            <div style={{display: "flex"}}>
+                {timerState === 0 ? (<TimesList/>) : ""}
+                {timerState === 0 ? (<Stats/>) : ""}
+            </div>
+
         </>
     );
 }
 
 function TimesList() {
-    const times = useLiveQuery(
+    const records = useLiveQuery(
         () => db.times.toArray()
     );
 
-    return (
-        <ol style={{background: "grey", width: "300px", display: "flex", flexDirection: "column-reverse"}}>
-            {times?.map((times) => {
-                const time = times.time;
-                const hours = Math.floor(time / 360_000);
-                const minutes = Math.floor((time % 360_000) / 6_000);
-                const seconds = Math.floor((time % 6_000) / 100);
-                const milliseconds = Math.floor(time % 100);
+    function resetSession() {
+        db.times.clear();
+    }
 
-                return (
-                    <li>
-                        <button key={times.id} style={{width: "100px", }}>
-                            {(hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
-                            (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
-                            `${seconds}.`) + milliseconds.toString().padStart(2, '0'))}
-                        </button>
-                    </li>
-                );
+    return (
+        <div style={{background: "grey", width: "300px"}}>
+            <button onClick={resetSession}>X</button>
+            <ol style={{display: "flex", flexDirection: "column-reverse"}}>
+                {records?.map((record) => {
+                        return (
+                            <li key={record.id}>
+                                <button style={{width: "100px", }}>
+                                    {formatTime(record.time, true)}
+                                </button>
+                            </li>
+                        );
+                    }
+                )}
+            </ol>
+        </div>
+    );
+}
+
+function Stats() {
+    const [times, setTimes] = useState([]);
+    const ao5 = averageOfLastX(5);
+    const ao12 = averageOfLastX(12);
+    const best = times.length ? Math.min(...times) : undefined;
+
+    useEffect(() => {
+        async function getTimerRecords() {
+            try {
+                const data = await db.times.toArray();
+                setTimes(data.map((record) => record.time));
+            } catch (error) {
+                console.log("Error: " + error);
             }
-            )}
-        </ol>
+        }
+        getTimerRecords();
+    }, []);
+
+    function averageOfLastX(x) {
+        let ao = undefined;
+        if (times.length >= x) {
+            let lastX = times.slice(-x);
+            const maxIndex = lastX.indexOf(Math.max(...lastX));
+            lastX.splice(maxIndex, 1);
+            const minIndex = lastX.indexOf(Math.min(...lastX));
+            lastX.splice(minIndex, 1);
+            ao = lastX.reduce((acc, value) => acc + value, 0) / lastX.length;
+        }
+        return ao;
+    }
+
+    return (
+        <div style={{display: "block"}}>
+            <div>average of 5: {ao5 ? formatTime(Math.round(ao5), true) : "-"}</div>
+            <div>average of 12: {ao12 ? formatTime(Math.round(ao12), true) : "-"}</div>
+            <div>best: {best ? formatTime(best, true) : "-"}</div>
+        </div>
+    );
+}
+
+function formatTime(time, fullMilliseconds) {
+    const hours = Math.floor(time / 360_000);
+    const minutes = Math.floor((time % 360_000) / 6_000);
+    const seconds = Math.floor((time % 6_000) / 100);
+    const milliseconds = Math.floor(time % 100);
+
+    return (
+        (hours ? `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.` :
+            (minutes ? `${minutes}:${seconds.toString().padStart(2, '0')}.` :
+                `${seconds}.`)
+        + (fullMilliseconds ? milliseconds.toString().padStart(2, '0') : Math.floor(milliseconds/10)))
     );
 }
