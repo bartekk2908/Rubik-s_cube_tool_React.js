@@ -1,5 +1,8 @@
 
-- przerzucenie kodu do plików
+- widoczność przycisków
+- moduł algorytmów
+- brak zmiany algorytmu po anulowaniu timera
+
 
 - modyfikacja/usuwanie rekordów na liście czasów
 - +2 i DNF

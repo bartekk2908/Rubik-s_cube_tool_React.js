@@ -80,18 +80,18 @@ export function Timer({ holdingSpaceTime }) {
         setTime(0);
     }
 
-    function startPreinspection() {
-        resetPreinspection();
+    function startInspection() {
+        resetInspection();
         setInspectionState(1);
         setTimerState(2);
         setInspectionStartTime(Date.now());
     }
 
-    function resetPreinspection() {
+    function resetInspection() {
         setInspectionTime(1500);
     }
 
-    function changePreinspection() {
+    function changeInspection() {
         setWithInspection(!withInspection);
     }
 
@@ -125,7 +125,7 @@ export function Timer({ holdingSpaceTime }) {
         } else {
             clearTimeout(holdingSpaceTimeout);
             if (timerState === 1) {
-                startPreinspection();
+                startInspection();
             } else if (timerState === 3) {
                 startTimer();
             }
@@ -171,7 +171,7 @@ export function Timer({ holdingSpaceTime }) {
         };
     }, []);
 
-    const preinspectionComs = [
+    const inspectionComs = [
         " ",
         " ",
         "8!",
@@ -188,14 +188,16 @@ export function Timer({ holdingSpaceTime }) {
                     ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
-            {preinspectionComs[inspectionState]}
-            {/* <button onClick={timerState === 4 ? stopTimer : startTimer}>{timerState === 4 ? "Stop" : "Start"}</button> */}
-            {timerState === 0 ? (<><input type="checkbox" checked={withInspection} onChange={changePreinspection}/>preinspection</>) : ""}
-            <div style={{display: "flex"}}>
-                {timerState === 0 ? (<TimesList/>) : ""}
-                {timerState === 0 ? (<Stats/>) : ""}
-            </div>
-
+            {inspectionComs[inspectionState]}
+            {timerState === 0 ? (
+                <>
+                    <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
+                    <div style={{display: "flex"}}>
+                        <TimesList/>
+                        <Stats/>
+                    </div>
+                </>
+            ) : ""}
         </>
     );
 }
