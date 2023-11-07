@@ -24,12 +24,22 @@ body {
   width: 34px;
 }
 
-.top-bottom-square {
+.top-square {
   height: 17px;
   width: 34px;
 }
 
-.left-right-square {
+.bottom-square {
+  height: 17px;
+  width: 34px;
+}
+
+.left-square {
+  height: 34px;
+  width: 17px;
+}
+
+.right-square {
   height: 34px;
   width: 17px;
 }
@@ -41,20 +51,18 @@ body {
 
 .algorithm {
   margin: 30px;
-  width: 141px;
+  width: 180px;
 }
 
 .algorithm-container {
-  height: 200px;
-  width: 200px;
+  height: 206px;
+  width: 206px;
   border: 1px solid #777;
+  float: left;
+  flex-basis: 33%;
 }
 
-.row {
-  text-align: center;
-}
-
-.row:after {
+.cube-row:after {
   clear: both;
   content: '';
   display: table;
@@ -88,8 +96,8 @@ body {
   background-color: green;
 }
 
+.algorithms-list {
+  display: flex;
+  flex-wrap: wrap;
 
-
-
-
-
+}
