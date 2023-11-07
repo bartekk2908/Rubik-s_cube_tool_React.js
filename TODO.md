@@ -1,16 +1,15 @@
 
-- widoczność przycisków
-- moduł algorytmów
-- brak zmiany algorytmu po anulowaniu timera
+- PLL'e w excelu
+- ładowanie algorytmów po trzy
+- klikanie w algorytm i przejście do timera
+- generowanie algorytmów mieszających
+- zapisywanie czasów dla algorytmów
 
 
 - modyfikacja/usuwanie rekordów na liście czasów
-- +2 i DNF
+- +2 i DNF (różne rodzaje +2)
 - możliwość exportu/importu danych
 
-- moduł uczenia się algorytmów
-- znaleźć albo zrobić obrazki dla algorytmów
-- znaleźć listę algorytmów i generowanie algorytmów mieszających 
 - zakładki na OLL, PLL, (F2L)
 - progressbar
 

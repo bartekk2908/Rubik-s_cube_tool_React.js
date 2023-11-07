@@ -2,6 +2,7 @@ import {useState} from "react";
 import './App.css';
 
 import {Timer} from "./Timer";
+import {Algorithms} from "./Algorithms";
 
 
 export default function App() {
@@ -10,17 +11,25 @@ export default function App() {
     // 0 - timer
     // 1 - training CFOP algorithms
 
+    function setVisibility(timerState) {
+        timerState ? setIsVisible(false) : setIsVisible(true);
+    }
+
     return (
         <>
-            {isVisible}
-            <button onClick={() => {setModuleState(0)}}>Timer</button>
-            <button onClick={() => {setModuleState(1)}}>Algorithms</button>
+            {isVisible ? (
+                <>
+                    <button onClick={() => {setModuleState(0)}}>Timer</button>
+                    <button onClick={() => {setModuleState(1)}}>Algorithms</button>
+                </>
+            ) : ""}
             {moduleState === 0 ? (
                 <div className="Timer">
-                    <Timer holdingSpaceTime={500}/>
+                    <Timer holdingSpaceTime={500} giveTimerStateFunc={setVisibility}/>
                 </div>
                 ) :
-                <div className="">
+                <div className="Timer">
+                    <Algorithms/>
                 </div>
             }
         </>

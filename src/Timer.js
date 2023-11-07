@@ -6,8 +6,9 @@ import {TimesList} from "./TimesList";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime }) {
+export function Timer({ holdingSpaceTime, giveTimerStateFunc }) {
     const [scramble, setScramble] = useState(null);
+    const [doUpdateScramble, setDoUpdateScramble] = useState(true);
 
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
@@ -37,6 +38,7 @@ export function Timer({ holdingSpaceTime }) {
 
     // running timer
     useEffect(() => {
+        giveTimerStateFunc(timerState);
         let intervalId;
         if (timerState === 4) {
             intervalId = setInterval(() => setTime(Math.floor((Date.now() - startTime)/10)), 10);
@@ -74,6 +76,7 @@ export function Timer({ holdingSpaceTime }) {
     function stopTimer(plus_two, dnf) {
         addTimerRecord(plus_two, dnf);
         setTimerState(0);
+        setDoUpdateScramble(true);
     }
 
     function resetTimer() {
@@ -106,10 +109,6 @@ export function Timer({ holdingSpaceTime }) {
         } catch (error) {
             console.log("Error: " + error);
         }
-    }
-
-    function getScramble(scr) {
-        setScramble(scr);
     }
 
     // operations when spacePressed status is changed
@@ -182,7 +181,12 @@ export function Timer({ holdingSpaceTime }) {
 
     return (
         <>
-            <ScrambleField n={20} isVisible={timerState === 0} getScramble={getScramble}/>
+            <ScrambleField
+                n={20}
+                isVisible={timerState === 0}
+                giveScrambleFunc={(scr) => {setScramble(scr); setDoUpdateScramble(false);}}
+                doUpdate={doUpdateScramble}
+            />
             <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
                 {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
                     ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :

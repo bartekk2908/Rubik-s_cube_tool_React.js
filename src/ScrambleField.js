@@ -1,19 +1,19 @@
 import {useEffect, useState} from "react";
 
-export function ScrambleField({ n, isVisible, getScramble }) {
+export function ScrambleField({ n, isVisible, giveScrambleFunc, doUpdate }) {
     const [scramble, setScramble] = useState(generateScramble(n));
-
-    useEffect(() => {
-        if (isVisible) {
-            updateScramble();
-        }
-    }, [isVisible]);
 
     function updateScramble() {
         const scr = generateScramble(n);
         setScramble(scr);
-        getScramble(scr);
+        giveScrambleFunc(scr);
     }
+
+    useEffect(() => {
+        if (doUpdate) {
+            updateScramble();
+        }
+    }, [doUpdate]);
 
     function generateScramble(n) {
         const faces = ['F', 'B', 'R', 'L', 'U', 'D'];
