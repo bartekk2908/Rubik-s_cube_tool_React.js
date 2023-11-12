@@ -1,63 +1,38 @@
 import {CubePiece} from "./CubePiece";
 
-export function OneAlgorithm({piecesScheme, colorOnTop = 4}) {
+export function OneAlgorithm({piecesScheme, colorOnTop = 4, colorOnFront = 6}) {
 
-    const orientation = {
-        1: {
-            0: 0,
-            1: 4,
-            2: 5,
-            3: 3,
-            4: 1,
-            5: 2,
-            6: 6,
-        },
-        2: {
-            0: 0,
-            1: 5,
-            2: 1,
-            3: 3,
-            4: 2,
-            5: 4,
-            6: 6,
-        },
-        3: {
-            0: 0,
-            1: 6,
-            2: 2,
-            3: 1,
-            4: 3,
-            5: 5,
-            6: 4,
-        },
-        4: {
-            0: 0,
-            1: 1,
-            2: 2,
-            3: 3,
-            4: 4,
-            5: 5,
-            6: 6,
-        },
-        5: {
-            0: 0,
-            1: 2,
-            2: 4,
-            3: 3,
-            4: 5,
-            5: 1,
-            6: 6,
-        },
-        6: {
-            0: 0,
-            1: 3,
-            2: 2,
-            3: 4,
-            4: 6,
-            5: 5,
-            6: 1,
-        }
+    const colorForFace = {
+        0: 0,
+        1: colorOnTop,
+        2: giveOppositeColor(colorOnTop),
+        3: colorOnFront,
+        4: giveOppositeColor(colorOnFront),
+        5: giveOppositeColor(giveColorOnLeft(colorOnTop, colorOnFront)),
+        6: giveColorOnLeft(colorOnTop, colorOnFront),
     };
+    // 0 - grey color,
+    // 1 - top face color
+    // 2 - bottom face color
+    // 3 - front face color
+    // 4 - back face color
+    // 5 - right face color
+    // 6 - left face color
+
+    function giveOppositeColor(color) {
+        return (color + 2) % 6 + 1;
+    }
+
+    function giveColorOnLeft(topColor, frontColor) {
+        const allowedColors = [1, 2, 3, 4, 5, 6];
+        const step = topColor % 2 === 1 ? (1) : (-1);
+        return (
+            allowedColors[(frontColor - 1 + step) % 6] === topColor ||
+            allowedColors[(frontColor - 1 + step) % 6] === giveOppositeColor(topColor) ?
+            (allowedColors[(frontColor - 1 + step * 2) % 6]) : (allowedColors[(frontColor - 1 + step) % 6])
+        );
+    }
+
     const colors = {
         0: "grey",
         1: "white",
@@ -72,37 +47,37 @@ export function OneAlgorithm({piecesScheme, colorOnTop = 4}) {
         <div className={"algorithm"}>
             <div className={"cube-row"}>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
-                <CubePiece sizeColorClass={"top-square " + colors[orientation[colorOnTop][piecesScheme[0][1]]]}/>
-                <CubePiece sizeColorClass={"top-square " + colors[orientation[colorOnTop][piecesScheme[0][2]]]}/>
-                <CubePiece sizeColorClass={"top-square " + colors[orientation[colorOnTop][piecesScheme[0][3]]]}/>
+                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[0][1]]]}/>
+                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[0][2]]]}/>
+                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[0][3]]]}/>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
             </div>
             <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[orientation[colorOnTop][piecesScheme[1][0]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[1][1]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[1][2]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[1][3]]]}/>
-                <CubePiece sizeColorClass={"right-square " + colors[orientation[colorOnTop][piecesScheme[1][4]]]}/>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[1][0]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[1][1]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[1][2]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[1][3]]]}/>
+                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[1][4]]]}/>
             </div>
             <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[orientation[colorOnTop][piecesScheme[2][0]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[2][1]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[2][2]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[2][3]]]}/>
-                <CubePiece sizeColorClass={"right-square " + colors[orientation[colorOnTop][piecesScheme[2][4]]]}/>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[2][0]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[2][1]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[2][2]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[2][3]]]}/>
+                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[2][4]]]}/>
             </div>
             <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[orientation[colorOnTop][piecesScheme[3][0]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[3][1]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[3][2]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[orientation[colorOnTop][piecesScheme[3][3]]]}/>
-                <CubePiece sizeColorClass={"right-square " + colors[orientation[colorOnTop][piecesScheme[3][4]]]}/>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[3][0]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[3][1]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[3][2]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[3][3]]]}/>
+                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[3][4]]]}/>
             </div>
             <div className={"cube-row"}>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
-                <CubePiece sizeColorClass={"bottom-square " + colors[orientation[colorOnTop][piecesScheme[4][1]]]}/>
-                <CubePiece sizeColorClass={"bottom-square " + colors[orientation[colorOnTop][piecesScheme[4][2]]]}/>
-                <CubePiece sizeColorClass={"bottom-square " + colors[orientation[colorOnTop][piecesScheme[4][3]]]}/>
+                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[4][1]]]}/>
+                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[4][2]]]}/>
+                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[4][3]]]}/>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
             </div>
         </div>
