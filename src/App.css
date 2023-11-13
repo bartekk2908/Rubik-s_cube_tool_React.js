@@ -19,37 +19,42 @@ body {
   opacity: 0;
 }
 
+:root {
+  --full-length: 34px;
+  --side-length: 12px;
+}
+
 .front-square {
-  height: 34px;
-  width: 34px;
+  height: var(--full-length);
+  width: var(--full-length);
 }
 
 .top-square {
-  height: 17px;
-  width: 34px;
+  height: var(--side-length);
+  width: var(--full-length);
 }
 
 .bottom-square {
-  height: 17px;
-  width: 34px;
+  height: var(--side-length);
+  width: var(--full-length);
 }
 
 .left-square {
-  height: 34px;
-  width: 17px;
+  height: var(--full-length);
+  width: var(--side-length);
 }
 
 .right-square {
-  height: 34px;
-  width: 17px;
+  height: var(--full-length);
+  width: var(--side-length);
 }
 
 .corner {
-  height: 17px;
-  width: 17px;
+  height: var(--side-length);
+  width: var(--side-length);
 }
 
-.algorithm {
+.algorithm-face {
   margin: 30px;
   width: 180px;
 }

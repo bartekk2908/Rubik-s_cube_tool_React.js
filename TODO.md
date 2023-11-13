@@ -1,6 +1,5 @@
 
 - PLL'e w excelu
-- ładowanie algorytmów po trzy
 - klikanie w algorytm i przejście do timera
 - generowanie algorytmów mieszających
 - zapisywanie czasów dla algorytmów
