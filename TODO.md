@@ -1,15 +1,18 @@
 
-- PLL'e w excelu
-- klikanie w algorytm i przejście do timera
-- generowanie algorytmów mieszających
+- walidacja kolorów algorytmów 
+- klikanie w algorytm - zmiana koloru i stanu
+- timer w algorytmach
+- generowanie algorytmów mieszających (uwzględnić x itd)
 - zapisywanie czasów dla algorytmów
 
-
-- modyfikacja/usuwanie rekordów na liście czasów
-- +2 i DNF (różne rodzaje +2)
-- możliwość exportu/importu danych
-
+- dodać OLL'e
 - zakładki na OLL, PLL, (F2L)
 - progressbar
 
-- wizualizacja kostki 3d lub 2d
+- modyfikacja/usuwanie rekordów na liście czasów
+- +2 i DNF (różne rodzaje +2)
+
+- poprawić wygląd przez css
+
+- możliwość exportu/importu danych
+- wizualizacja kostki 2d
