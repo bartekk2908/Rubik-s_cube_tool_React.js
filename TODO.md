@@ -1,9 +1,10 @@
 
-- walidacja kolorów algorytmów 
-- klikanie w algorytm - zmiana koloru i stanu
+- walidacja kolorów algorytmów
 - timer w algorytmach
 - generowanie algorytmów mieszających (uwzględnić x itd)
 - zapisywanie czasów dla algorytmów
+- zapisywanie ustawień poprzez local storage
+- wybieranie kolorków kostki
 
 - dodać OLL'e
 - zakładki na OLL, PLL, (F2L)

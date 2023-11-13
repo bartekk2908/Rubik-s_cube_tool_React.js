@@ -47,37 +47,37 @@ export function AlgorithmFace({piecesScheme, colorOnTop, colorOnFront}) {
         <div className={"algorithm-face"}>
             <div className={"cube-row"}>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
-                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[10]]]}/>
-                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[9]]]}/>
                 <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[8]]]}/>
+                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[7]]]}/>
+                <CubePiece sizeColorClass={"top-square " + colors[colorForFace[piecesScheme[6]]]}/>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
             </div>
             <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[11]]]}/>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[9]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[12]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[13]]]}/>
                 <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[14]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[15]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[16]]]}/>
-                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[7]]]}/>
-            </div>
-            <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[12]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[17]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[18]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[19]]]}/>
-                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[6]]]}/>
-            </div>
-            <div className={"cube-row"}>
-                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[13]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[20]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[21]]]}/>
-                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[22]]]}/>
                 <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[5]]]}/>
             </div>
             <div className={"cube-row"}>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[10]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[15]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[16]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[17]]]}/>
+                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[4]]]}/>
+            </div>
+            <div className={"cube-row"}>
+                <CubePiece sizeColorClass={"left-square " + colors[colorForFace[piecesScheme[11]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[18]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[19]]]}/>
+                <CubePiece sizeColorClass={"front-square " + colors[colorForFace[piecesScheme[20]]]}/>
+                <CubePiece sizeColorClass={"right-square " + colors[colorForFace[piecesScheme[3]]]}/>
+            </div>
+            <div className={"cube-row"}>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
+                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[0]]]}/>
+                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[1]]]}/>
                 <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[2]]]}/>
-                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[3]]]}/>
-                <CubePiece sizeColorClass={"bottom-square " + colors[colorForFace[piecesScheme[4]]]}/>
                 <CubePiece sizeColorClass={"corner "} isVisible={false}/>
             </div>
         </div>

@@ -56,12 +56,10 @@ body {
 
 .algorithm-face {
   margin: 30px;
-  width: 180px;
+  width: 130px;
 }
 
 .algorithm-container {
-  height: 206px;
-  width: 206px;
   border: 1px solid #777;
   float: left;
   flex-basis: 33%;
