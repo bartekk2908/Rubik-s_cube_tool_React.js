@@ -12,3 +12,19 @@ export function formatTime(time, fullMilliseconds) {
             + (fullMilliseconds ? milliseconds.toString().padStart(2, '0') : Math.floor(milliseconds/10)))
     );
 }
+
+function giveReversedAlgorithm(algorithm) {
+    const moves = algorithm.split(" ");
+
+    let reversedAlgorithm = "";
+    for (let i=0; i<moves.length; i++) {
+        if (moves[i].slice(-1) === "'") {
+            reversedAlgorithm = moves[i].slice(0, -1) + " " + reversedAlgorithm;
+        } else if (moves[i].slice(-1) === "2") {
+            reversedAlgorithm = moves[i] + " " + reversedAlgorithm;
+        } else {
+            reversedAlgorithm = moves[i] + "'" + " " + reversedAlgorithm;
+        }
+    }
+    return reversedAlgorithm;
+}
