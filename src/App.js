@@ -2,7 +2,7 @@ import {useState} from "react";
 import './App.css';
 
 import {Timer} from "./Timer";
-import {AlgorithmsList} from "./AlgorithmsList";
+import {AlgorithmTrainer} from "./AlgorithmTrainer";
 
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
                 </div>
                 ) :
                 <div className="Timer">
-                    <AlgorithmsList/>
+                    <AlgorithmTrainer/>
                 </div>
             }
         </>

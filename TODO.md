@@ -1,6 +1,6 @@
 
 - walidacja kolorów algorytmów
-- timer w algorytmach
+- 3 tryby timera (normal, pll, oll)
 - generowanie algorytmów mieszających (uwzględnić x itd)
 - zapisywanie czasów dla algorytmów
 - zapisywanie ustawień poprzez local storage
