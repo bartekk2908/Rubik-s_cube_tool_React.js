@@ -2,13 +2,12 @@ import {useEffect, useState} from "react";
 
 import {ScrambleField} from "./ScrambleField";
 import {Stats} from "./Stats";
-import {TimesList} from "./TimesList";
+import {ResultsList} from "./ResultsList";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc }) {
-    const [scramble, setScramble] = useState(null);
-    const [doUpdateScramble, setDoUpdateScramble] = useState(true);
+export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength }) {
+    const [scramble, setScramble] = useState(generateScramble(scrambleLength));
 
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
@@ -76,7 +75,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc }) {
     function stopTimer(plus_two, dnf) {
         addTimerRecord(plus_two, dnf);
         setTimerState(0);
-        setDoUpdateScramble(true);
+        updateScramble();
     }
 
     function resetTimer() {
@@ -179,14 +178,40 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc }) {
         "17!!!",
     ];
 
+    function generateScramble(n) {
+        const faces = ['F', 'B', 'R', 'L', 'U', 'D'];
+        const modifiers = ["", "'", "2"];
+        let scramble = "";
+        let face = "";
+        let lastFace = "";
+        let nextToLastFace = "";
+        for (let i = 0; i<n; i++) {
+            // choose again if:
+            // chosen face is the same as last face
+            // OR
+            // chosen face is the same as next to last face and last face is opposite face to chosen face
+            do {
+                face = faces[Math.floor(Math.random()*faces.length)];
+            } while (lastFace === face || (nextToLastFace === face && lastFace === (faces.indexOf(face)%2 ? faces[faces.indexOf(face)-1] : faces[faces.indexOf(face)+1])))
+            nextToLastFace = lastFace;
+            lastFace = face;
+            scramble += face + modifiers[Math.floor(Math.random()*modifiers.length)] + " ";
+        }
+        return scramble;
+    }
+
+    function updateScramble() {
+        setScramble(generateScramble(scrambleLength));
+    }
+
     return (
         <>
-            <ScrambleField
-                n={20}
-                isVisible={timerState === 0}
-                giveScrambleFunc={(scr) => {setScramble(scr); setDoUpdateScramble(false);}}
-                doUpdate={doUpdateScramble}
-            />
+            {timerState === 0 ? (
+                <ScrambleField
+                    scramble={scramble}
+                    updateScramble={updateScramble}
+                />
+            ) : ""}
             <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
                 {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
                     ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :
@@ -197,7 +222,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc }) {
                 <>
                     <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
                     <div style={{display: "flex"}}>
-                        <TimesList/>
+                        <ResultsList/>
                         <Stats/>
                     </div>
                 </>

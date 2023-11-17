@@ -2,7 +2,7 @@ import {useState} from "react";
 import './App.css';
 
 import {Timer} from "./Timer";
-import {AlgorithmList} from "./AlgorithmList";
+import {AlgorithmsList} from "./AlgorithmsList";
 
 
 export default function App() {
@@ -25,11 +25,15 @@ export default function App() {
             ) : ""}
             {moduleState === 0 ? (
                 <div className="Timer">
-                    <Timer holdingSpaceTime={500} giveTimerStateFunc={setVisibility}/>
+                    <Timer
+                        holdingSpaceTime={500}
+                        giveTimerStateFunc={setVisibility}
+                        scrambleLength={20}
+                    />
                 </div>
                 ) :
                 <div className="Timer">
-                    <AlgorithmList/>
+                    <AlgorithmsList/>
                 </div>
             }
         </>

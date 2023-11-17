@@ -5,7 +5,7 @@ import {Algorithm} from "./Algorithm";
 
 const pathToExcelFile = "./excel/PLLs.xlsx";
 
-export function AlgorithmList({colorOnTop = 1, colorOnFront = 5}) {
+export function AlgorithmsList({colorOnTop = 1, colorOnFront = 5}) {
     const [algorithmsData, setAlgorithmsData] = useState(null);
     const [learningStateDict, setLearningStateDict] = useState(new Map());
 

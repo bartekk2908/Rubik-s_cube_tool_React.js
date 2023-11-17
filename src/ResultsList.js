@@ -3,7 +3,7 @@ import {useLiveQuery} from "dexie-react-hooks";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function TimesList() {
+export function ResultsList() {
     const records = useLiveQuery(
         () => db.times.toArray()
     );
