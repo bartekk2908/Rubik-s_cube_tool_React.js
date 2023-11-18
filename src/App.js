@@ -1,15 +1,35 @@
 import {useState} from "react";
 import './App.css';
+import * as XLSX from "xlsx";
 
 import {Timer} from "./Timer";
-import {AlgorithmTrainer} from "./AlgorithmTrainer";
+import {AlgorithmsList} from "./AlgorithmsList";
+import {useLiveQuery} from "dexie-react-hooks";
+import {db} from "./db";
 
+const pathToExcelFile = "./excel/Algorithms.xlsx";
 
 export default function App() {
     const [moduleState, setModuleState] = useState(0);
-    const [isVisible, setIsVisible] = useState(true);
     // 0 - timer
     // 1 - training CFOP algorithms
+
+    const [isVisible, setIsVisible] = useState(true);
+    const [algorithmsData, setAlgorithmsData] = useState(null);
+
+    const records = useLiveQuery(
+        () => db.times.toArray()
+    );
+
+    // loading excel file data to 'algorithmsData' state
+    fetch(pathToExcelFile)
+        .then((res) => res.arrayBuffer())
+        .then((ab) => {
+            const wb = XLSX.read(ab, { type: "array" });
+            const worksheet = wb.Sheets[wb.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            setAlgorithmsData(jsonData.slice(1));
+        });
 
     function setVisibility(timerState) {
         timerState ? setIsVisible(false) : setIsVisible(true);
@@ -29,11 +49,14 @@ export default function App() {
                         holdingSpaceTime={500}
                         giveTimerStateFunc={setVisibility}
                         scrambleLength={20}
+                        records={records}
                     />
                 </div>
                 ) :
                 <div className="Timer">
-                    <AlgorithmTrainer/>
+                    <AlgorithmsList
+                        algorithmsData={algorithmsData}
+                    />
                 </div>
             }
         </>

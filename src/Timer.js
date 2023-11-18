@@ -6,7 +6,7 @@ import {ResultsList} from "./ResultsList";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength }) {
+export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, records }) {
     const [scramble, setScramble] = useState(generateScramble(scrambleLength));
 
     // time in 10 ms unit
@@ -222,7 +222,9 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength }) 
                 <>
                     <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
                     <div style={{display: "flex"}}>
-                        <ResultsList/>
+                        <ResultsList
+                            records={records}
+                        />
                         <Stats/>
                     </div>
                 </>

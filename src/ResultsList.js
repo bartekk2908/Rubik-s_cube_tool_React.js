@@ -1,12 +1,9 @@
-import {useLiveQuery} from "dexie-react-hooks";
+
 
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function ResultsList() {
-    const records = useLiveQuery(
-        () => db.times.toArray()
-    );
+export function ResultsList({ records }) {
 
     function resetSession() {
         db.times.clear();
