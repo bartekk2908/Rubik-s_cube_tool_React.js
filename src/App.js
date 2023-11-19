@@ -16,6 +16,7 @@ export default function App() {
 
     const [isVisible, setIsVisible] = useState(true);
     const [algorithmsData, setAlgorithmsData] = useState(null);
+    const [learningStateDict, setLearningStateDict] = useState(new Map());
 
     const records = useLiveQuery(
         () => db.times.toArray()
@@ -31,8 +32,20 @@ export default function App() {
             setAlgorithmsData(jsonData.slice(1));
         });
 
+    function initLearningStateDict() {
+        let dict = new Map();
+        for (let i=0; i<100; i++) {
+            dict.set(i, 0);
+        }
+        return dict;
+    }
+
     function setVisibility(timerState) {
         timerState ? setIsVisible(false) : setIsVisible(true);
+    }
+
+    function giveLearningState(id, value) {
+        learningStateDict.set(id, value);
     }
 
     return (
@@ -50,12 +63,16 @@ export default function App() {
                         giveTimerStateFunc={setVisibility}
                         scrambleLength={20}
                         records={records}
+                        algorithmsData={algorithmsData}
+                        learningStateDict={learningStateDict}
                     />
                 </div>
                 ) :
                 <div className="Timer">
                     <AlgorithmsList
                         algorithmsData={algorithmsData}
+                        giveLearningStateFunc={giveLearningState}
+                        learningStateDict={learningStateDict}
                     />
                 </div>
             }

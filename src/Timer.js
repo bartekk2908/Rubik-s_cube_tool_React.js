@@ -6,8 +6,12 @@ import {ResultsList} from "./ResultsList";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, records }) {
-    const [scramble, setScramble] = useState(generateScramble(scrambleLength));
+export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, records, algorithmsData, learningStateDict }) {
+    const [scramble, setScramble] = useState(generateNormalScramble(scrambleLength));
+    const [scrambleType, setScrambleType] = useState(0);
+    // 0 - Normal
+    // 1 - PLL
+    // 2 - OLL
 
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
@@ -178,7 +182,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         "17!!!",
     ];
 
-    function generateScramble(n) {
+    function generateNormalScramble(n) {
         const faces = ['F', 'B', 'R', 'L', 'U', 'D'];
         const modifiers = ["", "'", "2"];
         let scramble = "";
@@ -200,17 +204,63 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         return scramble;
     }
 
+    function generateAlgorithmScramble() {
+        const listOfChosen = giveListOfChosenAlgorithms(1);
+        const id = listOfChosen[Math.floor(Math.random()*listOfChosen.length)];
+
+        const AUF = ['', 'U', 'U2', "U'"];
+        const algorithm = algorithmsData[id][1];
+        return (AUF[Math.floor(Math.random()*AUF.length)] + giveReversedSequence(algorithm) + AUF[Math.floor(Math.random()*AUF.length)]);
+    }
+
+    function giveReversedSequence(sequence) {
+        const moves = sequence.split(" ");
+
+        let reversedSequence = "";
+        for (let i=0; i<moves.length; i++) {
+            if (moves[i].slice(-1) === "'") {
+                reversedSequence = moves[i].slice(0, -1) + " " + reversedSequence;
+            } else if (moves[i].slice(-1) === "2") {
+                reversedSequence = moves[i] + " " + reversedSequence;
+            } else {
+                reversedSequence = moves[i] + "' " + reversedSequence;
+            }
+        }
+        return reversedSequence;
+    }
+
+    function giveListOfChosenAlgorithms(wantedValue) {
+        let listOfChosen = [];
+        for (const pair of learningStateDict.entries()) {
+            if (pair[1] === wantedValue) {
+                listOfChosen.push(pair[0]);
+            }
+        }
+        return (listOfChosen);
+    }
+
     function updateScramble() {
-        setScramble(generateScramble(scrambleLength));
+        if (scrambleType === 0) {
+            setScramble(generateNormalScramble(scrambleLength));
+        } else  {
+            setScramble(generateAlgorithmScramble());
+        }
     }
 
     return (
         <>
             {timerState === 0 ? (
-                <ScrambleField
-                    scramble={scramble}
-                    updateScramble={updateScramble}
-                />
+                <>
+                    <div>
+                        <button onClick={() => {setScrambleType(0)}}>Normal</button>
+                        <button onClick={() => {setScrambleType(1)}}>PLL</button>
+                        <button onClick={() => {setScrambleType(2)}}>OLL</button>
+                    </div>
+                    <ScrambleField
+                        scramble={scramble}
+                        updateScramble={updateScramble}
+                    />
+                </>
             ) : ""}
             <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
                 {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :

@@ -2,14 +2,15 @@ import {useState, useEffect} from "react";
 
 import {AlgorithmFace} from "./AlgorithmFace";
 
-export function Algorithm({algorithmData, colorOnTop, colorOnFront, giveLearningStateFunc}) {
-    const [learningState, setLearningState] = useState(0);
+export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveLearningStateFunc, learningStateValue=0 }) {
+    const [learningState, setLearningState] = useState(learningStateValue);
     // 0 - not learning
     // 1 - learning
     // 2 - learned
 
     const algorithmName = algorithmData[0];
     const algorithmString = algorithmData[1];
+    const algorithmId = algorithmData[24];
     const piecesScheme = algorithmData.slice(2);
 
     function switchLearningState() {
@@ -23,7 +24,7 @@ export function Algorithm({algorithmData, colorOnTop, colorOnFront, giveLearning
     }
 
     useEffect(() => {
-        giveLearningStateFunc(algorithmName, learningState);
+        giveLearningStateFunc(algorithmId, learningState);
     }, [learningState]);
 
     return (

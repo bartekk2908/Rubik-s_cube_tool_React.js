@@ -1,5 +1,4 @@
 
-- walidacja kolorów algorytmów
 - 3 tryby timera (normal, pll, oll)
 - generowanie algorytmów mieszających (uwzględnić x itd)
 - zapisywanie czasów dla algorytmów
