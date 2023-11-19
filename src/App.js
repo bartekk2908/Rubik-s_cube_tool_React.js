@@ -18,8 +18,12 @@ export default function App() {
     const [algorithmsData, setAlgorithmsData] = useState(null);
     const [learningStateDict, setLearningStateDict] = useState(new Map());
 
-    const records = useLiveQuery(
-        () => db.times.toArray()
+    const normalSolvingResults = useLiveQuery(
+        () => db.normal_solving_results.toArray()
+    );
+
+    const PllOllResults = useLiveQuery(
+        () => db.pll_oll_results.toArray()
     );
 
     // loading excel file data to 'algorithmsData' state
@@ -62,7 +66,8 @@ export default function App() {
                         holdingSpaceTime={500}
                         giveTimerStateFunc={setVisibility}
                         scrambleLength={20}
-                        records={records}
+                        normalSolvingResults={normalSolvingResults}
+                        PllOllResults={PllOllResults}
                         algorithmsData={algorithmsData}
                         learningStateDict={learningStateDict}
                     />

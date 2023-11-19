@@ -3,21 +3,21 @@
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function ResultsList({ records }) {
+export function ResultsList({ results }) {
 
     function resetSession() {
-        db.times.clear();
+        db.normal_solving_results.clear();
     }
 
     return (
         <div style={{background: "grey", width: "300px"}}>
             <button onClick={resetSession}>X</button>
             <ol style={{display: "flex", flexDirection: "column-reverse"}}>
-                {records?.map((record) => {
+                {results?.map((result) => {
                         return (
-                            <li key={record.id}>
+                            <li key={result.id}>
                                 <button style={{width: "100px", }}>
-                                    {formatTime(record.time, true)}
+                                    {formatTime(result.time, true)}
                                 </button>
                             </li>
                         );

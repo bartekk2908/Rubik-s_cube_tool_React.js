@@ -6,12 +6,14 @@ import {ResultsList} from "./ResultsList";
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, records, algorithmsData, learningStateDict }) {
+export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, normalSolvingResults, PllOllResults, algorithmsData, learningStateDict }) {
     const [scramble, setScramble] = useState(generateNormalScramble(scrambleLength));
     const [scrambleType, setScrambleType] = useState(0);
     // 0 - Normal
     // 1 - PLL
     // 2 - OLL
+
+    const [algorithmId, setAlgorithmId] = useState(null);
 
     // time in 10 ms unit
     const [time, setTime] = useState( 0);
@@ -31,6 +33,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     const [withInspection, setWithInspection] = useState(false);
     const [inspectionTime, setInspectionTime] = useState(1500);
     const [inspectionStartTime, setInspectionStartTime] = useState(Date.now());
+
     const [inspectionState, setInspectionState] = useState(0);
     // 0 - no inspection now
     // 1 - inspection has started
@@ -76,8 +79,17 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         setStartTime(Date.now());
     }
 
-    function stopTimer(plus_two, dnf) {
-        addTimerRecord(plus_two, dnf);
+    function stopTimer(byEsc = false) {
+        if (scrambleType === 0) {
+            if (byEsc) {
+                addNormalResult(false, true);
+            } else {
+                addNormalResult(false, false);
+            }
+        } else {
+            addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
+        }
+
         setTimerState(0);
         updateScramble();
     }
@@ -101,13 +113,27 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         setWithInspection(!withInspection);
     }
 
-    async function addTimerRecord(plus_two, dnf) {
+    async function addNormalResult(plusTwo, dnf) {
         try {
-            const id = await db.times.add({
+            const id = await db.normal_solving_results.add({
                 scramble,
                 time,
-                plus_two,
+                plusTwo,
                 dnf,
+            });
+        } catch (error) {
+            console.log("Error: " + error);
+        }
+    }
+
+    async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
+        try {
+            const id = await db.pll_oll_results.add({
+                scramble,
+                time,
+                algorithmName,
+                algorithmType,
+                algorithmSequence,
             });
         } catch (error) {
             console.log("Error: " + error);
@@ -118,7 +144,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     useEffect(() => {
         if (spacePressed) {
             if (timerState === 4) {
-                stopTimer(false, false);
+                stopTimer();
             } else if (timerState === 0 && withInspection) {
                 setTimerState(1);
             } else if ((timerState === 0 && !withInspection) || timerState === 2) {
@@ -141,7 +167,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
             if (timerState === 1 || timerState === 2 || timerState === 3) {
                 setTimerState(0);
             } else if (timerState === 4) {
-                stopTimer(false, true);
+                stopTimer(true);
             } else if (timerState === 0) {
                 // set DNF
             }
@@ -207,8 +233,9 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     function generateAlgorithmScramble() {
         const listOfChosen = giveListOfChosenAlgorithms(1);
         const id = listOfChosen[Math.floor(Math.random()*listOfChosen.length)];
+        setAlgorithmId(id);
 
-        const AUF = ['', 'U', 'U2', "U'"];
+        const AUF = ['', 'U ', 'U2 ', "U' "];
         const algorithm = algorithmsData[id][1];
         return (AUF[Math.floor(Math.random()*AUF.length)] + giveReversedSequence(algorithm) + AUF[Math.floor(Math.random()*AUF.length)]);
     }
@@ -247,6 +274,11 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         }
     }
 
+    useEffect(() => {
+        updateScramble();
+        setWithInspection(false);
+    }, [scrambleType]);
+
     return (
         <>
             {timerState === 0 ? (
@@ -270,12 +302,18 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
             {inspectionComs[inspectionState]}
             {timerState === 0 ? (
                 <>
-                    <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
+                    {scrambleType === 0 ? (
+                        <>
+                            <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
+                        </>
+                    ) : ""}
                     <div style={{display: "flex"}}>
                         <ResultsList
-                            records={records}
+                            results={normalSolvingResults}
                         />
-                        <Stats/>
+                        {scrambleType === 0 ? (
+                            <Stats/>
+                        ) : ""}
                     </div>
                 </>
             ) : ""}
