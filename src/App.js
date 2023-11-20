@@ -22,8 +22,12 @@ export default function App() {
         () => db.normal_solving_results.toArray()
     );
 
-    const PllOllResults = useLiveQuery(
-        () => db.pll_oll_results.toArray()
+    const PllResults = useLiveQuery(
+        () => db.pll_oll_results.where("algorithmType").equals("PLL").toArray()
+    );
+
+    const OllResults = useLiveQuery(
+        () => db.pll_oll_results.where("algorithmType").equals("OLL").toArray()
     );
 
     // loading excel file data to 'algorithmsData' state
@@ -66,8 +70,7 @@ export default function App() {
                         holdingSpaceTime={500}
                         giveTimerStateFunc={setVisibility}
                         scrambleLength={20}
-                        normalSolvingResults={normalSolvingResults}
-                        PllOllResults={PllOllResults}
+                        results={[normalSolvingResults, PllResults, OllResults]}
                         algorithmsData={algorithmsData}
                         learningStateDict={learningStateDict}
                     />

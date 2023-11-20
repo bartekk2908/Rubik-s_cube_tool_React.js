@@ -1,6 +1,5 @@
 
-- rozróżnienie pll i oll
-- wyniki
+- usuwanie pll i oll wyników
 
 - poprawa algorytmów x itd
 
@@ -11,10 +10,7 @@
 - wybieranie kolorków kostki
 - menu
 
-- progressbar
-
 - statsy dla algorytmów
-- 
 
 - modyfikacja/usuwanie rekordów na liście czasów
 - +2 i DNF (różne rodzaje +2)

@@ -6,7 +6,7 @@ import {ResultsList} from "./ResultsList";
 import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, normalSolvingResults, PllOllResults, algorithmsData, learningStateDict }) {
+export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, results, algorithmsData, learningStateDict }) {
     const [scramble, setScramble] = useState(generateNormalScramble(scrambleLength));
     const [scrambleType, setScrambleType] = useState(0);
     // 0 - Normal
@@ -315,7 +315,8 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, no
                     ) : ""}
                     <div style={{display: "flex"}}>
                         <ResultsList
-                            results={normalSolvingResults}
+                            results={results}
+                            scrambleType={scrambleType}
                         />
                         {scrambleType === 0 ? (
                             <Stats/>
