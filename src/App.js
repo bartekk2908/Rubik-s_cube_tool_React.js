@@ -45,7 +45,7 @@ export default function App() {
     }
 
     function setVisibility(timerState) {
-        timerState ? setIsVisible(false) : setIsVisible(true);
+        timerState > 0 ? setIsVisible(false) : setIsVisible(true);
     }
 
     function giveLearningState(id, value) {
@@ -56,8 +56,8 @@ export default function App() {
         <>
             {isVisible ? (
                 <>
-                    <button onClick={() => {setModuleState(0)}}>Timer</button>
-                    <button onClick={() => {setModuleState(1)}}>Algorithms</button>
+                    <button className={"custom-button"} onClick={() => {setModuleState(0)}}>Timer</button>
+                    <button className={"custom-button"} onClick={() => {setModuleState(1)}}>Algorithms</button>
                 </>
             ) : ""}
             {moduleState === 0 ? (

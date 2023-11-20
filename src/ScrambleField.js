@@ -4,9 +4,9 @@ export function ScrambleField({ scramble, updateScramble }) {
     return (
             <>
                 <div>
-                    <button onClick={updateScramble}>next scramble</button>
+                    <button className={"custom-button"} onClick={updateScramble}>next scramble</button>
                 </div>
-                <div>{scramble}</div>
+                <div style={{fontSize: 20}}>{scramble}</div>
             </>
     );
 }

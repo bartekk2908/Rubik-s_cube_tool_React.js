@@ -1,8 +1,6 @@
 
 - rozróżnienie pll i oll
-- zakładki w liście
 - wyniki
-- przypadek kiedy nie mamy wybranych żadnych algorytmów
 
 - poprawa algorytmów x itd
 

@@ -12,3 +12,13 @@ export function formatTime(time, fullMilliseconds) {
             + (fullMilliseconds ? milliseconds.toString().padStart(2, '0') : Math.floor(milliseconds/10)))
     );
 }
+
+export function giveListOfChosenAlgorithms(wantedValue, algorithmType, learningStateDict, algorithmsData) {
+    let listOfChosen = [];
+    for (const pair of learningStateDict.entries()) {
+        if (pair[1] === wantedValue && algorithmsData[pair[0]][23] === algorithmType) {
+            listOfChosen.push(pair[0]);
+        }
+    }
+    return (listOfChosen);
+}

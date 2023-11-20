@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {ScrambleField} from "./ScrambleField";
 import {Stats} from "./Stats";
 import {ResultsList} from "./ResultsList";
-import {formatTime} from "./extra_functions";
+import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
 import {db} from "./db";
 
 export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, normalSolvingResults, PllOllResults, algorithmsData, learningStateDict }) {
@@ -20,6 +20,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, no
     const [startTime, setStartTime] = useState(Date.now());
 
     const [timerState, setTimerState] = useState(0);
+    // -1 - can't start because of zero chosen algorithms
     // 0 - normal state
     // 1 - is ready to start inspection (holding space but do not have to)
     // 2 - inspection time
@@ -231,7 +232,10 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, no
     }
 
     function generateAlgorithmScramble() {
-        const listOfChosen = giveListOfChosenAlgorithms(1);
+        const listOfChosen = giveListOfChosenAlgorithms(1, (scrambleType === 1 ? "PLL" : "OLL"), learningStateDict, algorithmsData);
+        if (listOfChosen.length === 0) {
+            return "";
+        }
         const id = listOfChosen[Math.floor(Math.random()*listOfChosen.length)];
         setAlgorithmId(id);
 
@@ -256,51 +260,53 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, no
         return reversedSequence;
     }
 
-    function giveListOfChosenAlgorithms(wantedValue) {
-        let listOfChosen = [];
-        for (const pair of learningStateDict.entries()) {
-            if (pair[1] === wantedValue) {
-                listOfChosen.push(pair[0]);
-            }
-        }
-        return (listOfChosen);
-    }
+
 
     function updateScramble() {
         if (scrambleType === 0) {
             setScramble(generateNormalScramble(scrambleLength));
         } else  {
-            setScramble(generateAlgorithmScramble());
+            const scr = generateAlgorithmScramble();
+            if (scr === "") {
+                setTimerState(-1);
+            } else {
+                setScramble(scr);
+            }
         }
     }
 
     useEffect(() => {
+        setTimerState(0);
         updateScramble();
         setWithInspection(false);
     }, [scrambleType]);
 
     return (
         <>
-            {timerState === 0 ? (
+            {timerState <= 0 ? (
                 <>
                     <div>
-                        <button onClick={() => {setScrambleType(0)}}>Normal</button>
-                        <button onClick={() => {setScrambleType(1)}}>PLL</button>
-                        <button onClick={() => {setScrambleType(2)}}>OLL</button>
+                        <button className={"custom-button"} onClick={() => {setScrambleType(0)}}>Normal</button>
+                        <button className={"custom-button"} onClick={() => {setScrambleType(1)}}>PLL</button>
+                        <button className={"custom-button"} onClick={() => {setScrambleType(2)}}>OLL</button>
                     </div>
-                    <ScrambleField
-                        scramble={scramble}
-                        updateScramble={updateScramble}
-                    />
+                    {timerState === -1 ? (
+                        <div>No algorithms selected</div>
+                    ) : (
+                        <ScrambleField
+                            scramble={scramble}
+                            updateScramble={updateScramble}
+                        />
+                    )}
                 </>
             ) : ""}
-            <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold"}}>
+            <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold", fontSize: 100, font: "arial"}}>
                 {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
                     ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
             {inspectionComs[inspectionState]}
-            {timerState === 0 ? (
+            {timerState <= 0 ? (
                 <>
                     {scrambleType === 0 ? (
                         <>

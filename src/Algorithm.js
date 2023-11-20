@@ -10,8 +10,9 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveLearnin
 
     const algorithmName = algorithmData[0];
     const algorithmString = algorithmData[1];
+    const algorithmType = algorithmData[23];
     const algorithmId = algorithmData[24];
-    const piecesScheme = algorithmData.slice(2);
+    const piecesScheme = algorithmData.slice(2, 23);
 
     function switchLearningState() {
         if (learningState === 0) {
@@ -36,9 +37,9 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveLearnin
                 <div>
                     {algorithmString}
                 </div>
-                <div>
-                    {algorithmName}
-                </div>
+                <b>
+                    {algorithmType + " - " + algorithmName}
+                </b>
             </div>
         </button>
     );
