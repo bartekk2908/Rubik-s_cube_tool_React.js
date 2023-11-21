@@ -4,7 +4,9 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import {Algorithm} from "./Algorithm";
 import {giveListOfChosenAlgorithms} from "./extra_functions";
 
-export function AlgorithmsList({ colorOnTop = 1, colorOnFront = 5, algorithmsData, giveLearningStateFunc, learningStateDict }) {
+export function AlgorithmsList({ algorithmsData, giveLearningStateFunc, learningStateDict }) {
+    const [colorOnTop, setColorOnTop] = useState(4);
+    const [colorOnFront, setColorOnFront] = useState(5);
     const [algorithmsListState, setAlgorithmsListState] = useState(0);
     // 0 - PLLs
     // 1 - OLLs
@@ -41,33 +43,33 @@ export function AlgorithmsList({ colorOnTop = 1, colorOnFront = 5, algorithmsDat
 
     return (
         <div>
-            <div style={{marginBottom: "20px"}}>
-                <button className={"custom-button"} onClick={() => {setAlgorithmsListState(0)}}>PLLs</button>
-                <button className={"custom-button"} onClick={() => {setAlgorithmsListState(1)}}>OLLs</button>
+            <div style={{marginBottom: "20px", display: "flex"}}>
+                <button className={"custom-button"} disabled={!algorithmsListState} onClick={() => {setAlgorithmsListState(0)}}>PLLs</button>
+                <button className={"custom-button"} disabled={algorithmsListState} onClick={() => {setAlgorithmsListState(1)}}>OLLs</button>
+                <div style={{padding: "20px", backgroundColor: "#999"}}>
+                    <button onClick={() => {setColorOnTop(4)}} style={{height: "20px", width: "20px", backgroundColor: "yellow", fontSize: "10px"}}>X</button>
+                </div>
             </div>
             {algorithmsListState ? (
                 <>
-                    <div>OLLs progress: {numberOfGreenOLLs}/{numberOfOLLs}</div>
+                    <b>OLLs progress: {numberOfGreenOLLs}/{numberOfOLLs}</b>
                     <ProgressBar>
                         <ProgressBar min={0} max={numberOfOLLs} now={numberOfGreenOLLs} label={numberOfGreenOLLs} variant={"success"} key={1} />
                         <ProgressBar min={0} max={numberOfOLLs} now={numberOfYellowOLLs} label={numberOfYellowOLLs} variant={"warning"} key={2} />
                     </ProgressBar>
-                    <div className={"algorithms-list"}>
-                        {algorithms}
-                    </div>
                 </>
             ) : (
                 <>
-                    <div>PLLs progress: {numberOfGreenPLLs}/{numberOfPLLs}</div>
+                    <b>PLLs progress: {numberOfGreenPLLs}/{numberOfPLLs}</b>
                     <ProgressBar>
                         <ProgressBar min={0} max={numberOfPLLs} now={numberOfGreenPLLs} label={numberOfGreenPLLs} variant={"success"} key={1} />
                         <ProgressBar min={0} max={numberOfPLLs} now={numberOfYellowPLLs} label={numberOfYellowPLLs} variant={"warning"} key={2} />
                     </ProgressBar>
-                    <div className={"algorithms-list"}>
-                        {algorithms}
-                    </div>
                 </>
             )}
+            <div className={"algorithms-list"}>
+                {algorithms}
+            </div>
         </div>
     );
 }

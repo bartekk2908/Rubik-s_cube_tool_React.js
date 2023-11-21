@@ -1,20 +1,14 @@
 
 - usuwanie pll i oll wyników
-
+- zbadanie czemy statystyki nie działają
 - poprawa algorytmów x itd
-
-- zapisywanie ustawień poprzez local storage
+- kolory strony w css
+- poprawić odstępy i pozycje elementów
+- przejrzeć kod, pozmieniać nazwy, css
 - zapisaywanie opcji with inspection
 - zapisywanie learningstatedict
-
-- wybieranie kolorków kostki
-- menu
-
-- statsy dla algorytmów
-
-- modyfikacja/usuwanie rekordów na liście czasów
+- wybieranie kolorków kostki menu
+- modyfikacja rekordów na liście
 - +2 i DNF (różne rodzaje +2)
-
-- poprawić wygląd przez css
-
+- statsy dla algorytmów
 - wizualizacja kostki 2d

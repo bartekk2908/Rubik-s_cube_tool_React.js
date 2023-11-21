@@ -29,7 +29,7 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveLearnin
     }, [learningState]);
 
     return (
-        <button style={{display: "flex", backgroundColor: (learningState === 0 ? "" : (learningState === 1 ? "yellow" : "lightgreen"))}}
+        <button style={{display: "flex", backgroundColor: (learningState === 0 ? "" : (learningState === 1 ? "#ffff4d" : "lightgreen"))}}
                 onClick={switchLearningState}
                 className={"algorithm-container"}>
             <AlgorithmFace piecesScheme={piecesScheme} colorOnTop={colorOnTop} colorOnFront={colorOnFront}/>

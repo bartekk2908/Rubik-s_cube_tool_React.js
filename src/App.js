@@ -40,14 +40,6 @@ export default function App() {
             setAlgorithmsData(jsonData.slice(1));
         });
 
-    function initLearningStateDict() {
-        let dict = new Map();
-        for (let i=0; i<100; i++) {
-            dict.set(i, 0);
-        }
-        return dict;
-    }
-
     function setVisibility(timerState) {
         timerState > 0 ? setIsVisible(false) : setIsVisible(true);
     }
@@ -60,8 +52,8 @@ export default function App() {
         <>
             {isVisible ? (
                 <>
-                    <button className={"custom-button"} onClick={() => {setModuleState(0)}}>Timer</button>
-                    <button className={"custom-button"} onClick={() => {setModuleState(1)}}>Algorithms</button>
+                    <button className={"custom-button"} disabled={!moduleState} onClick={() => {setModuleState(0)}}>Timer</button>
+                    <button className={"custom-button"} disabled={moduleState} onClick={() => {setModuleState(1)}}>Algorithms</button>
                 </>
             ) : ""}
             {moduleState === 0 ? (

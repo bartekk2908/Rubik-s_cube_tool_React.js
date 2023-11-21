@@ -286,9 +286,9 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
             {timerState <= 0 ? (
                 <>
                     <div>
-                        <button className={"custom-button"} onClick={() => {setScrambleType(0)}}>Normal</button>
-                        <button className={"custom-button"} onClick={() => {setScrambleType(1)}}>PLL</button>
-                        <button className={"custom-button"} onClick={() => {setScrambleType(2)}}>OLL</button>
+                        <button className={"custom-button"} disabled={!scrambleType} onClick={() => {setScrambleType(0)}}>Normal</button>
+                        <button className={"custom-button"} disabled={scrambleType === 1} onClick={() => {setScrambleType(1)}}>PLL</button>
+                        <button className={"custom-button"} disabled={scrambleType === 2} onClick={() => {setScrambleType(2)}}>OLL</button>
                     </div>
                     {timerState === -1 ? (
                         <div>No algorithms selected</div>

@@ -10,7 +10,7 @@
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: lightgray;
+  background-color: #ffffcc;
 }
 
 .custom-button {
@@ -23,6 +23,13 @@
 }
 .custom-button:active {
   background-color: #555;
+}
+.custom-button:disabled {
+  border: 1px solid #999999;
+  background-color: #444;
+}
+.custom-button:disabled:active {
+  background-color: #444;
 }
 
 .cube-piece {
