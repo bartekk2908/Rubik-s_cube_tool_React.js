@@ -1,14 +1,15 @@
-
 import {formatTime} from "./extra_functions";
 import {db} from "./db";
 
 export function ResultsList({ results, scrambleType }) {
 
     function resetSession() {
-        if (scrambleType) {
-
-        } else {
+        if (scrambleType === 0) {
             db.normal_solving_results.clear();
+        } else if (scrambleType === 1) {
+            db.pll_oll_results.where("algorithmType").equals("PLL").delete();
+        } else {
+            db.pll_oll_results.where("algorithmType").equals("OLL").delete();
         }
     }
 

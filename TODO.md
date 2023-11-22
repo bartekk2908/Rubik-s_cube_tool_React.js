@@ -1,6 +1,4 @@
 
-- usuwanie pll i oll wyników
-- zbadanie czemy statystyki nie działają
 - poprawa algorytmów x itd
 - kolory strony w css
 - poprawić odstępy i pozycje elementów
