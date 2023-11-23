@@ -10,6 +10,7 @@ export function Stats({ results, scrambleType }) {
     const ao12 = averageOfLastX(12);
     const best = times ? (times.length ? Math.min(...times) : undefined) : undefined;
 
+    // calculating average of x last results without first and last results
     function averageOfLastX(x) {
         let ao = undefined;
         if (times) {
@@ -26,7 +27,7 @@ export function Stats({ results, scrambleType }) {
     }
 
     return (
-        <div style={{display: "block"}}>
+        <div className={"stats"}>
             <div>average of 5: {ao5 ? formatTime(Math.round(ao5), true) : "-"}</div>
             <div>average of 12: {ao12 ? formatTime(Math.round(ao12), true) : "-"}</div>
             <div>best: {best ? formatTime(best, true) : "-"}</div>

@@ -2,40 +2,52 @@ import {useState, useEffect} from "react";
 
 import {AlgorithmFace} from "./AlgorithmFace";
 
-export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveLearningStateFunc, learningStateValue=0 }) {
-    const [learningState, setLearningState] = useState(learningStateValue);
-    // 0 - not learning
-    // 1 - learning
+export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainingStateFunc, trainingStateValue=0 }) {
+    const [trainingState, setTrainingState] = useState(trainingStateValue);
+    // 0 - new / not learned yet
+    // 1 - training
     // 2 - learned
 
     const algorithmName = algorithmData[0];
-    const algorithmString = algorithmData[1];
+    const algorithmSequence = algorithmData[1];
     const algorithmType = algorithmData[23];
     const algorithmId = algorithmData[24];
     const piecesScheme = algorithmData.slice(2, 23);
 
-    function switchLearningState() {
-        if (learningState === 0) {
-            setLearningState(1);
-        } else if (learningState === 1) {
-            setLearningState(2);
-        } else {
-            setLearningState(0);
+    // After click in algorithm area changes its state of training
+    function switchTrainingState() {
+        switch (trainingState) {
+            case 0:
+                setTrainingState(1);
+                break;
+            case 1:
+                setTrainingState(2);
+                break;
+            case 2:
+                setTrainingState(0);
+                break;
+            default:
         }
     }
 
     useEffect(() => {
-        giveLearningStateFunc(algorithmId, learningState);
-    }, [learningState]);
+        giveTrainingStateFunc(algorithmId, trainingState);
+    }, [trainingState]);
 
     return (
-        <button style={{display: "flex", backgroundColor: (learningState === 0 ? "" : (learningState === 1 ? "#ffff4d" : "lightgreen"))}}
-                onClick={switchLearningState}
-                className={"algorithm-container"}>
-            <AlgorithmFace piecesScheme={piecesScheme} colorOnTop={colorOnTop} colorOnFront={colorOnFront}/>
-            <div style={{display: "block", width: "300px"}}>
+        <button
+            style={{display: "flex", backgroundColor: (trainingState === 0 ? "" : (trainingState === 1 ? "#ffff4d" : "lightgreen"))}}
+            onClick={switchTrainingState}
+            className={"algorithm-area"}
+        >
+            <AlgorithmFace
+                piecesScheme={piecesScheme}
+                colorOnTop={colorOnTop}
+                colorOnFront={colorOnFront}
+            />
+            <div className={"algorithm-text"}>
                 <div>
-                    {algorithmString}
+                    {algorithmSequence}
                 </div>
                 <b>
                     {algorithmType + " - " + algorithmName}

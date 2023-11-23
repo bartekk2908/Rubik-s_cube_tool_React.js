@@ -2,7 +2,6 @@ import {CubePiece} from "./CubePiece";
 import {colorOfNumber, giveOppositeColor, giveColorOnLeft} from "./extra_functions";
 
 export function AlgorithmFace({piecesScheme, colorOnTop, colorOnFront}) {
-
     const colorForFace = {
         0: 0,
         1: colorOnTop,

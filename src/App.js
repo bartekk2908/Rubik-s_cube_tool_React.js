@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import './App.css';
 import * as XLSX from "xlsx";
 
@@ -14,23 +14,26 @@ export default function App() {
     // 0 - timer
     // 1 - training CFOP algorithms
 
-    const [isVisible, setIsVisible] = useState(true);
+    const [visibility, setVisibility] = useState(true);
     const [algorithmsData, setAlgorithmsData] = useState(null);
-    const [learningStateDict, setLearningStateDict] = useState((localStorage.getItem('learningStateDict') === null ? new Map() : new Map(JSON.parse(localStorage.getItem('learningStateDict')))));
+    const [trainingStatesDict, setTrainingStatesDict] = useState(
+        (localStorage.getItem('trainingStatesDict') === null ? new Map() :
+            new Map(JSON.parse(localStorage.getItem('trainingStatesDict'))))
+    );
 
     const normalSolvingResults = useLiveQuery(
-        () => db.normal_solving_results.toArray()
+        () => db.solving_results.toArray()
     );
 
     const PllResults = useLiveQuery(
-        () => db.pll_oll_results.where("algorithmType").equals("PLL").toArray()
+        () => db.pll_oll_training_results.where("algorithmType").equals("PLL").toArray()
     );
 
     const OllResults = useLiveQuery(
-        () => db.pll_oll_results.where("algorithmType").equals("OLL").toArray()
+        () => db.pll_oll_training_results.where("algorithmType").equals("OLL").toArray()
     );
 
-    // loading excel file data to 'algorithmsData' state
+    // Loading excel file data to 'algorithmsData' state
     fetch(pathToExcelFile)
         .then((res) => res.arrayBuffer())
         .then((ab) => {
@@ -40,40 +43,47 @@ export default function App() {
             setAlgorithmsData(jsonData.slice(1));
         });
 
-    function setVisibility(timerState) {
-        timerState > 0 ? setIsVisible(false) : setIsVisible(true);
+    function determineVisibility(timerState) {
+        timerState > 0 ? setVisibility(false) : setVisibility(true);
     }
 
-    function giveLearningState(id, value) {
-        const temp = learningStateDict.set(id, value);
-        localStorage.setItem("learningStateDict", JSON.stringify(Array.from(temp)));
+    function giveTrainingState(id, value) {
+        localStorage.setItem("learningStateDict", JSON.stringify(Array.from(trainingStatesDict.set(id, value))));
     }
 
     return (
         <>
-            {isVisible ? (
+            {visibility ? (
                 <>
-                    <button className={"custom-button"} disabled={!moduleState} onClick={() => {setModuleState(0)}}>Timer</button>
-                    <button className={"custom-button"} disabled={moduleState} onClick={() => {setModuleState(1)}}>Algorithms</button>
+                    <button
+                        className={"custom-button"}
+                        disabled={!moduleState}
+                        onClick={() => {setModuleState(0)}}
+                    >Timer</button>
+                    <button
+                        className={"custom-button"}
+                        disabled={moduleState}
+                        onClick={() => {setModuleState(1)}}
+                    >Algorithms</button>
                 </>
             ) : ""}
             {moduleState === 0 ? (
-                <div className="Timer">
+                <div className="timer">
                     <Timer
                         holdingSpaceTime={500}
-                        giveTimerStateFunc={setVisibility}
+                        determineVisibilityFunc={determineVisibility}
                         scrambleLength={20}
                         results={[normalSolvingResults, PllResults, OllResults]}
                         algorithmsData={algorithmsData}
-                        learningStateDict={learningStateDict}
+                        trainingStateDict={trainingStatesDict}
                     />
                 </div>
                 ) :
-                <div className="Timer">
+                <div className="algorithms-list">
                     <AlgorithmsList
                         algorithmsData={algorithmsData}
-                        giveLearningStateFunc={giveLearningState}
-                        learningStateDict={learningStateDict}
+                        giveTrainingStateFunc={giveTrainingState}
+                        trainingStateDict={trainingStatesDict}
                     />
                 </div>
             }

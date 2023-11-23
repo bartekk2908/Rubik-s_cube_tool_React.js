@@ -8,11 +8,6 @@
   --theme-color-4: #ffbf80;
 }
 
-.Timer {
-  text-align: center;
-  margin-top: 60px;
-}
-
 .body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -23,6 +18,9 @@
   background-color: var(--bg-color);
 }
 
+
+/* Buttons */
+
 .custom-button {
   border-radius: 5px;
   font-weight: bold;
@@ -32,18 +30,103 @@
   padding: 6px 12px;
   cursor: pointer;
 }
+
 .custom-button:active {
   background-color: var(--theme-color-2);
 }
+
 .custom-button:disabled {
   border: 1px solid;
   border-color: var(--theme-color-1);
   background-color: var(--theme-color-3);
   cursor: default;
 }
+
 .custom-button:disabled:active {
   background-color: var(--theme-color-3);
 }
+
+
+/* Timer */
+
+.timer {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.time {
+  font-weight: bold;
+  font-size: 100px;
+}
+
+.results-list-container {
+  background: var(--theme-color-2);
+  width: 300px;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.stats {
+  display: block;
+}
+
+
+/* Algorithms List */
+
+.algorithms-list {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.algorithms-list-menu {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.colors-menu {
+  padding: 20px;
+  background-color: var(--theme-color-2);
+}
+
+.progress {
+  width: 500px;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.algorithms {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Algorithm */
+
+.algorithm-area {
+  border: 1px solid var(--theme-color-1);
+  float: left;
+  flex-basis: 33%;
+}
+
+.algorithm-text {
+  display: block;
+  width: 300px;
+}
+
+.algorithm-face {
+  margin: 30px;
+  width: 140px;
+}
+
+.cube-row:after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/* Cube pieces */
 
 .cube-piece {
   border: 1px solid #000;
@@ -87,22 +170,7 @@
   width: var(--side-length);
 }
 
-.algorithm-face {
-  margin: 30px;
-  width: 140px;
-}
-
-.algorithm-container {
-  border: 1px solid var(--theme-color-1);
-  float: left;
-  flex-basis: 33%;
-}
-
-.cube-row:after {
-  clear: both;
-  content: '';
-  display: table;
-}
+/* Colors for cube pieces */
 
 .grey {
   background-color: #444;
@@ -132,18 +200,6 @@
   background-color: green;
 }
 
-.algorithms-list {
-  display: flex;
-  flex-wrap: wrap;
-}
 
-.results-list {
-  background: var(--theme-color-2);
-  width: 300px;
-}
+/* Other */
 
-.progress {
-  width: 500px;
-  margin: auto;
-  margin-bottom: 20px;
-}

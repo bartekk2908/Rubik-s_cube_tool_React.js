@@ -6,21 +6,22 @@ import {ResultsList} from "./ResultsList";
 import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, results, algorithmsData, learningStateDict }) {
-    const [scramble, setScramble] = useState(generateNormalScramble(scrambleLength));
-    const [scrambleType, setScrambleType] = useState(0);
+export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict }) {
+    const [scrambleSequence, setScrambleSequence] = useState(generateClassicScrambleSequence(scrambleLength));
+    const [timerTab, setTimerTab] = useState(0);
     // 0 - Normal
     // 1 - PLL
     // 2 - OLL
 
+    // While timer tab is PLL or OLL
     const [algorithmId, setAlgorithmId] = useState(null);
 
-    // time in 10 ms unit
+    // Time in 10 ms unit
     const [time, setTime] = useState( 0);
     const [startTime, setStartTime] = useState(Date.now());
 
     const [timerState, setTimerState] = useState(0);
-    // -1 - can't start because of zero chosen algorithms
+    // -1 - can't start because of zero chosen algorithms (only for PLL and OLL tab)
     // 0 - normal state
     // 1 - is ready to start inspection (holding space but do not have to)
     // 2 - inspection time
@@ -43,9 +44,9 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     // 4 - after 15 seconds (+2)
     // 5 - after 17 seconds (DNF)
 
-    // running timer
+    // Running timer
     useEffect(() => {
-        giveTimerStateFunc(timerState);
+        determineVisibilityFunc(timerState);
         let intervalId;
         if (timerState === 4) {
             intervalId = setInterval(() => setTime(Math.floor((Date.now() - startTime)/10)), 10);
@@ -53,7 +54,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         return () => clearInterval(intervalId);
     }, [timerState, time]);
 
-    // running inspection
+    // Running inspection
     useEffect(() => {
         let intervalId;
         if ((timerState === 2) || (timerState === 3 && withInspection)) {
@@ -81,11 +82,11 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     }
 
     function stopTimer(byEsc = false) {
-        if (scrambleType === 0) {
+        if (timerTab === 0) {
             if (byEsc) {
-                addNormalResult(false, true);
+                addNormalResult(false, false, true);
             } else {
-                addNormalResult(false, false);
+                addNormalResult(false, false, false);
             }
         } else {
             addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
@@ -116,23 +117,24 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         localStorage.setItem("withInspection",  temp ? "1" : "0");
     }
 
-    async function addNormalResult(plusTwo, dnf) {
+    // Saving result after stopped timer
+    async function addNormalResult(plusTwoInspection, plusTwoTurn, dnf) {
         try {
-            const id = await db.normal_solving_results.add({
-                scramble,
+            const id = await db.solving_results.add({
+                scramble: scrambleSequence,
                 time,
-                plusTwo,
+                plusTwoInspection,
+                plusTwoTurn,
                 dnf,
             });
         } catch (error) {
             console.log("Error: " + error);
         }
     }
-
     async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
         try {
-            const id = await db.pll_oll_results.add({
-                scramble,
+            const id = await db.pll_oll_training_results.add({
+                scramble: scrambleSequence,
                 time,
                 algorithmName,
                 algorithmType,
@@ -143,7 +145,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         }
     }
 
-    // operations when spacePressed status is changed
+    // Operations when spacePressed status is changed
     useEffect(() => {
         if (spacePressed) {
             if (timerState === 4) {
@@ -163,7 +165,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         }
     }, [spacePressed]);
 
-    // operations when escPressed status is changed
+    // Operations when escPressed status is changed
     useEffect(() => {
         if (escPressed) {
             clearTimeout(holdingSpaceTimeout);
@@ -177,7 +179,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         }
     }, [escPressed]);
 
-    // handling keyDown and keyUp
+    // Handling key down and key up
     useEffect(() => {
         function handleKeyDown(event) {
             if (event.key === ' ' && !event.repeat) {
@@ -202,7 +204,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         };
     }, []);
 
-    const inspectionComs = [
+    const inspectionMessages = [
         " ",
         " ",
         "8!",
@@ -211,7 +213,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         "17!!!",
     ];
 
-    function generateNormalScramble(n) {
+    function generateClassicScrambleSequence(n) {
         const faces = ['F', 'B', 'R', 'L', 'U', 'D'];
         const modifiers = ["", "'", "2"];
         let scramble = "";
@@ -233,8 +235,8 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         return scramble;
     }
 
-    function generateAlgorithmScramble() {
-        const listOfChosen = giveListOfChosenAlgorithms(1, (scrambleType === 1 ? "PLL" : "OLL"), learningStateDict, algorithmsData);
+    function generateAlgorithmScrambleSequence() {
+        const listOfChosen = giveListOfChosenAlgorithms(1, (timerTab === 1 ? "PLL" : "OLL"), trainingStateDict, algorithmsData);
         if (listOfChosen.length === 0) {
             return "";
         }
@@ -247,7 +249,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     }
 
     function giveReversedSequence(sequence) {
-        const moves = replaceRotations(replaceWideMoves(sequence.split(" ")));
+        const moves = removeRotations(replaceWideMoves(sequence.split(" ")));
 
         let reversedSequence = "";
         for (let i=0; i<moves.length; i++) {
@@ -287,7 +289,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         return array;
     }
 
-    function replaceRotations(array) {
+    function removeRotations(array) {
         const rotations = new Map([
             ["x", ["F", "D", "B", "U"]],
             ["y", ["F", "R", "B", "L"]],
@@ -320,14 +322,14 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     }
 
     function updateScramble() {
-        if (scrambleType === 0) {
-            setScramble(generateNormalScramble(scrambleLength));
+        if (timerTab === 0) {
+            setScrambleSequence(generateClassicScrambleSequence(scrambleLength));
         } else  {
-            const scr = generateAlgorithmScramble();
+            const scr = generateAlgorithmScrambleSequence();
             if (scr === "") {
                 setTimerState(-1);
             } else {
-                setScramble(scr);
+                setScrambleSequence(scr);
             }
         }
     }
@@ -336,49 +338,66 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
         setTimerState(0);
         updateScramble();
         setWithInspection(false);
-    }, [scrambleType]);
+    }, [timerTab]);
 
     return (
         <>
             {timerState <= 0 ? (
                 <>
                     <div>
-                        <button className={"custom-button"} disabled={!scrambleType} onClick={() => {setScrambleType(0)}}>Normal</button>
-                        <button className={"custom-button"} disabled={scrambleType === 1} onClick={() => {setScrambleType(1)}}>PLL</button>
-                        <button className={"custom-button"} disabled={scrambleType === 2} onClick={() => {setScrambleType(2)}}>OLL</button>
+                        <button
+                            className={"custom-button"}
+                            disabled={!timerTab}
+                            onClick={() => {setTimerTab(0)}}
+                        >Normal</button>
+                        <button
+                            className={"custom-button"}
+                            disabled={timerTab === 1}
+                            onClick={() => {setTimerTab(1)}}
+                        >PLL</button>
+                        <button
+                            className={"custom-button"}
+                            disabled={timerTab === 2}
+                            onClick={() => {setTimerTab(2)}}
+                        >OLL</button>
                     </div>
                     {timerState === -1 ? (
                         <div>No algorithms selected</div>
                     ) : (
                         <ScrambleField
-                            scramble={scramble}
+                            scramble={scrambleSequence}
                             updateScramble={updateScramble}
                         />
                     )}
                 </>
             ) : ""}
-            <div style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" )), fontWeight: "bold", fontSize: 100, font: "arial"}}>
+            <div className={"time"} style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" ))}}>
                 {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
                     ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
-            {inspectionComs[inspectionState]}
+            {inspectionMessages[inspectionState]}
             {timerState <= 0 ? (
                 <>
-                    {scrambleType === 0 ? (
+                    {timerTab === 0 ? (
                         <>
-                            <input type="checkbox" checked={!withInspection} onChange={changeInspection}/>inspection
+                            <input
+                                type="checkbox"
+                                checked={!withInspection}
+                                onChange={changeInspection}
+                                className={"inspection-checkbox"}
+                            />inspection
                         </>
                     ) : ""}
                     <div style={{display: "flex"}}>
                         <ResultsList
                             results={results}
-                            scrambleType={scrambleType}
+                            timerTab={timerTab}
                         />
-                        {scrambleType === 0 ? (
+                        {timerTab === 0 ? (
                             <Stats
                                 results={results}
-                                scrambleType={scrambleType}
+                                scrambleType={timerTab}
                             />
                         ) : ""}
                     </div>
