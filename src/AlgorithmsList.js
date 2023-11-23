@@ -48,6 +48,7 @@ export function AlgorithmsList({ algorithmsData, giveLearningStateFunc, learning
                 <button className={"custom-button"} disabled={algorithmsListState} onClick={() => {setAlgorithmsListState(1)}}>OLLs</button>
                 <div style={{padding: "20px", backgroundColor: "#999"}}>
                     <button onClick={() => {setColorOnTop(4)}} style={{height: "20px", width: "20px", backgroundColor: "yellow", fontSize: "10px"}}>X</button>
+                    https://youtu.be/qpo_74_57h0?si=B6HTxH5RvADrmq2h
                 </div>
             </div>
             {algorithmsListState ? (

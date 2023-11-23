@@ -31,7 +31,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
     const [escPressed, setEscPressed] = useState(false);
 
-    const [withInspection, setWithInspection] = useState(false);
+    const [withInspection, setWithInspection] = useState( localStorage.getItem("withInspection") === "true");
     const [inspectionTime, setInspectionTime] = useState(1500);
     const [inspectionStartTime, setInspectionStartTime] = useState(Date.now());
 
@@ -111,7 +111,9 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
     }
 
     function changeInspection() {
-        setWithInspection(!withInspection);
+        const temp = !withInspection
+        setWithInspection(temp);
+        localStorage.setItem("withInspection",  temp ? "1" : "0");
     }
 
     async function addNormalResult(plusTwo, dnf) {
@@ -365,7 +367,7 @@ export function Timer({ holdingSpaceTime, giveTimerStateFunc, scrambleLength, re
                 <>
                     {scrambleType === 0 ? (
                         <>
-                            <input type="checkbox" checked={withInspection} onChange={changeInspection}/>inspection
+                            <input type="checkbox" checked={!withInspection} onChange={changeInspection}/>inspection
                         </>
                     ) : ""}
                     <div style={{display: "flex"}}>

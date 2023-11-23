@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './App.css';
 import * as XLSX from "xlsx";
 
@@ -16,7 +16,7 @@ export default function App() {
 
     const [isVisible, setIsVisible] = useState(true);
     const [algorithmsData, setAlgorithmsData] = useState(null);
-    const [learningStateDict, setLearningStateDict] = useState(new Map());
+    const [learningStateDict, setLearningStateDict] = useState((localStorage.getItem('learningStateDict') === null ? new Map() : new Map(JSON.parse(localStorage.getItem('learningStateDict')))));
 
     const normalSolvingResults = useLiveQuery(
         () => db.normal_solving_results.toArray()
@@ -45,7 +45,10 @@ export default function App() {
     }
 
     function giveLearningState(id, value) {
-        learningStateDict.set(id, value);
+        const temp = learningStateDict.set(id, value);
+        console.log(temp);
+        console.log(JSON.stringify(temp));
+        localStorage.setItem("learningStateDict", JSON.stringify(Array.from(temp)));
     }
 
     return (

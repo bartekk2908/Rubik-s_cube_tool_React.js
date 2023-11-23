@@ -1,3 +1,13 @@
+:root {
+  --full-length: 34px;
+  --side-length: 12px;
+  --bg-color: #ffffcc;
+  --theme-color-1: #ff9933;
+  --theme-color-2: #dd7711;
+  --theme-color-3: #cc6600;
+  --theme-color-4: #ffbf80;
+}
+
 .Timer {
   text-align: center;
   margin-top: 60px;
@@ -10,26 +20,28 @@
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #ffffcc;
+  background-color: var(--bg-color);
 }
 
 .custom-button {
   border-radius: 5px;
   font-weight: bold;
-  background-color: #777;
+  background-color: var(--theme-color-1);
+  border-color: var(--theme-color-4);
   color: #ffffff;
   padding: 6px 12px;
   cursor: pointer;
 }
 .custom-button:active {
-  background-color: #555;
+  background-color: var(--theme-color-2);
 }
 .custom-button:disabled {
-  border: 1px solid #999999;
-  background-color: #444;
+  border: 1px solid;
+  border-color: var(--theme-color-1);
+  background-color: var(--theme-color-3);
 }
 .custom-button:disabled:active {
-  background-color: #444;
+  background-color: var(--theme-color-3);
 }
 
 .cube-piece {
@@ -42,11 +54,6 @@
 
 .invisible-piece {
   opacity: 0;
-}
-
-:root {
-  --full-length: 34px;
-  --side-length: 12px;
 }
 
 .front-square {
@@ -85,7 +92,7 @@
 }
 
 .algorithm-container {
-  border: 1px solid #777;
+  border: 1px solid var(--theme-color-1);
   float: left;
   flex-basis: 33%;
 }
