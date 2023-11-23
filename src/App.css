@@ -39,6 +39,7 @@
   border: 1px solid;
   border-color: var(--theme-color-1);
   background-color: var(--theme-color-3);
+  cursor: default;
 }
 .custom-button:disabled:active {
   background-color: var(--theme-color-3);
@@ -134,6 +135,11 @@
 .algorithms-list {
   display: flex;
   flex-wrap: wrap;
+}
+
+.results-list {
+  background: var(--theme-color-2);
+  width: 300px;
 }
 
 .progress {

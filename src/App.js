@@ -46,8 +46,6 @@ export default function App() {
 
     function giveLearningState(id, value) {
         const temp = learningStateDict.set(id, value);
-        console.log(temp);
-        console.log(JSON.stringify(temp));
         localStorage.setItem("learningStateDict", JSON.stringify(Array.from(temp)));
     }
 

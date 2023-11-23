@@ -1,8 +1,8 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {Algorithm} from "./Algorithm";
-import {giveListOfChosenAlgorithms} from "./extra_functions";
+import {colorOfNumber, giveListOfChosenAlgorithms, giveOppositeColor} from "./extra_functions";
 
 export function AlgorithmsList({ algorithmsData, giveLearningStateFunc, learningStateDict }) {
     const [colorOnTop, setColorOnTop] = useState(4);
@@ -11,6 +11,15 @@ export function AlgorithmsList({ algorithmsData, giveLearningStateFunc, learning
     // 0 - PLLs
     // 1 - OLLs
     const algorithmStates = ["PLL", "OLL"];
+
+    const colorsNumbers = [1, 2, 3, 4, 5, 6];
+    const colorsForFront = colorsNumbers.slice();
+    colorsForFront.splice(colorsForFront.indexOf(colorOnTop), 1);
+    colorsForFront.splice(colorsForFront.indexOf(giveOppositeColor(colorOnTop)), 1);
+
+    useEffect(() => {
+        setColorOnFront(colorsForFront[0]);
+    }, [colorOnTop])
 
     let algorithms = [];
     if (algorithmsData) {
@@ -47,8 +56,22 @@ export function AlgorithmsList({ algorithmsData, giveLearningStateFunc, learning
                 <button className={"custom-button"} disabled={!algorithmsListState} onClick={() => {setAlgorithmsListState(0)}}>PLLs</button>
                 <button className={"custom-button"} disabled={algorithmsListState} onClick={() => {setAlgorithmsListState(1)}}>OLLs</button>
                 <div style={{padding: "20px", backgroundColor: "#999"}}>
-                    <button onClick={() => {setColorOnTop(4)}} style={{height: "20px", width: "20px", backgroundColor: "yellow", fontSize: "10px"}}>X</button>
-                    https://youtu.be/qpo_74_57h0?si=B6HTxH5RvADrmq2h
+                    {colorsNumbers.slice().map((i) => {
+                        return (
+                            <button onClick={() => {setColorOnTop(i)}} style={{height: "20px", width: "20px", backgroundColor: colorOfNumber[i], fontSize: "10px"}}>
+                                {colorOnTop === i ? "X" : ""}
+                            </button>
+                        );
+                    })}
+                </div>
+                <div style={{padding: "20px", backgroundColor: "#999"}}>
+                    {colorsForFront.slice().map((i) => {
+                        return (
+                            <button onClick={() => {setColorOnFront(i)}} style={{height: "20px", width: "20px", backgroundColor: colorOfNumber[i], fontSize: "10px"}}>
+                                {colorOnFront === i ? "X" : ""}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
             {algorithmsListState ? (

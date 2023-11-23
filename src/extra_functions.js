@@ -22,3 +22,27 @@ export function giveListOfChosenAlgorithms(wantedValue, algorithmType, learningS
     }
     return (listOfChosen);
 }
+
+export const colorOfNumber = {
+    0: "grey",
+    1: "white",
+    2: "orange",
+    3: "blue",
+    4: "yellow",
+    5: "red",
+    6: "green",
+};
+
+export function giveOppositeColor(color) {
+    return (color + 2) % 6 + 1;
+}
+
+export function giveColorOnLeft(topColor, frontColor) {
+    const allowedColors = [1, 2, 3, 4, 5, 6];
+    const step = topColor % 2 === 1 ? (1) : (5);
+    return (
+        allowedColors[(frontColor - 1 + step) % 6] === topColor ||
+        allowedColors[(frontColor - 1 + step) % 6] === giveOppositeColor(topColor) ?
+            (allowedColors[(frontColor - 1 + step * 2) % 6]) : (allowedColors[(frontColor - 1 + step) % 6])
+    );
+}

@@ -1,5 +1,4 @@
 
-- wybieranie kolorków kostki menu
 - modyfikacja rekordów na liście
 - +2 i DNF (różne rodzaje +2)
 
@@ -9,3 +8,5 @@
 - statsy dla algorytmów
 - wykresy
 - wizualizacja kostki 2d
+
+- naprawa opóźnienia 

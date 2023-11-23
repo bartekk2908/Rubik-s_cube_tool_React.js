@@ -14,7 +14,7 @@ export function ResultsList({ results, scrambleType }) {
     }
 
     return (
-        <div style={{background: "grey", width: "300px"}}>
+        <div className={"results-list"}>
             <button className={"custom-button"} onClick={resetSession}>X</button>
             <ol style={{display: "flex", flexDirection: "column-reverse"}}>
                 {results[scrambleType]?.map((result) => {
