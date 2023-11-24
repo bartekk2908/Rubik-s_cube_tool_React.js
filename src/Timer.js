@@ -32,7 +32,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
     const [escPressed, setEscPressed] = useState(false);
 
-    const [withInspection, setWithInspection] = useState( localStorage.getItem("withInspection") === "true");
+    const [withInspection, setWithInspection] = useState( localStorage.getItem("withInspection") === "1");
     const [inspectionTime, setInspectionTime] = useState(1500);
     const [inspectionStartTime, setInspectionStartTime] = useState(Date.now());
 
@@ -150,9 +150,9 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         if (spacePressed) {
             if (timerState === 4) {
                 stopTimer();
-            } else if (timerState === 0 && withInspection) {
+            } else if (timerState === 0 && withInspection && timerTab === 0) {
                 setTimerState(1);
-            } else if ((timerState === 0 && !withInspection) || timerState === 2) {
+            } else if ((timerState === 0) || timerState === 2) {
                 setHoldingSpaceTimeout(setTimeout(() => {setTimerState(3);}, holdingSpaceTime));
             }
         } else {
@@ -337,7 +337,6 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     useEffect(() => {
         setTimerState(0);
         updateScramble();
-        setWithInspection(false);
     }, [timerTab]);
 
     return (
@@ -361,6 +360,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                             onClick={() => {setTimerTab(2)}}
                         >OLL</button>
                     </div>
+                    <br/>
                     {timerState === -1 ? (
                         <div>No algorithms selected</div>
                     ) : (
@@ -372,8 +372,8 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                 </>
             ) : ""}
             <div className={"time"} style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" ))}}>
-                {((timerState === 2 || (timerState === 3 && withInspection)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
-                    ((timerState === 3 && !withInspection) || (timerState === 1 )) ? "0.0" :
+                {((timerState === 2 || (timerState === 3 && withInspection && timerTab === 0)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
+                    ((timerState === 3 && (!withInspection || timerTab !== 0)) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
             {inspectionMessages[inspectionState]}
@@ -383,18 +383,19 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                         <>
                             <input
                                 type="checkbox"
-                                checked={!withInspection}
+                                checked={withInspection}
                                 onChange={changeInspection}
                                 className={"inspection-checkbox"}
-                            />inspection
+                            /> inspection
                         </>
                     ) : ""}
-                    <div style={{display: "flex"}}>
+                    <div className={"under-timer-container"}>
                         <ResultsList
                             results={results}
                             timerTab={timerTab}
                         />
                         {timerTab === 0 ? (
+
                             <Stats
                                 results={results}
                                 scrambleType={timerTab}

@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {Algorithm} from "./Algorithm";
 import {colorOfNumber, giveListOfChosenAlgorithms, giveOppositeColor} from "./extra_functions";
 
 export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, trainingStateDict }) {
-    const [colorOnTop, setColorOnTop] = useState(4);
-    const [colorOnFront, setColorOnFront] = useState(5);
+    const [colorOnTop, setColorOnTop] = useState(+localStorage.getItem("colorOnTop") || 1);
+    const [colorOnFront, setColorOnFront] = useState(+localStorage.getItem("colorOnFront") || 2);
     const [tab, setTab] = useState(0);
     // 0 - PLLs
     // 1 - OLLs
@@ -17,10 +17,21 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
     colorNumbersForFront.splice(colorNumbersForFront.indexOf(colorOnTop), 1);
     colorNumbersForFront.splice(colorNumbersForFront.indexOf(giveOppositeColor(colorOnTop)), 1);
 
-    // Set first possible color for Front when color for Top is changed
+    // Set first possible colorOnFront when colorOnTop is changed + save colorOnTop to localStorage
+    const firstUpdate = useRef(2);
     useEffect(() => {
+        if (firstUpdate.current) {
+            firstUpdate.current--;
+            return ;
+        }
         setColorOnFront(colorNumbersForFront[0]);
+        localStorage.setItem("colorOnTop", colorOnTop);
     }, [colorOnTop])
+
+    // Save colorOnFront to localStorage
+    useEffect(() => {
+        localStorage.setItem("colorOnFront", colorOnFront);
+    }, [colorOnFront]);
 
     // Map algorithms data to display cases with sequence
     const algorithms = algorithmsData?.map((algorithmData, i) => {
@@ -50,41 +61,47 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
     const numberOfOLLs = numberOfGreenOLLs + numberOfYellowOLLs + giveListOfChosenAlgorithms(0, "OLL", trainingStateDict, algorithmsData).length;
 
     return (
-        <div>
+        <div className="algorithms-list">
             <div className={"algorithms-list-menu"}>
-                <button
-                    className={"custom-button"}
-                    disabled={!tab}
-                    onClick={() => {setTab(0)}}
-                >PLLs</button>
-                <button
-                    className={"custom-button"}
-                    disabled={tab}
-                    onClick={() => {setTab(1)}}
-                >OLLs</button>
-                <div className={"colors-menu"}>
-                    {colorNumbersForTop.slice().map((i) => {
-                        return (
-                            <button
-                                className={"color-button"}
-                                onClick={() => {setColorOnTop(i)}}
-                                style={{height: "20px", width: "20px", backgroundColor: colorOfNumber[i], color: ([1, 4].includes(i) ? "black" : "white"), fontSize: "10px"}}
-                                key={i}
-                            >{colorOnTop === i ? "X" : "_"}</button>
-                        );
-                    })}
+                <div className={"tabs-menu"}>
+                    <button
+                        className={"custom-button"}
+                        disabled={!tab}
+                        onClick={() => {setTab(0)}}
+                    >PLLs</button>
+                    <button
+                        className={"custom-button"}
+                        disabled={tab}
+                        onClick={() => {setTab(1)}}
+                    >OLLs</button>
                 </div>
                 <div className={"colors-menu"}>
-                    {colorNumbersForFront.slice().map((i) => {
-                        return (
-                            <button
-                                className={"color-button"}
-                                onClick={() => {setColorOnFront(i)}}
-                                style={{height: "20px", width: "20px", backgroundColor: colorOfNumber[i], color: ([1, 4].includes(i) ? "black" : "white"), fontSize: "10px"}}
-                                key={i}
-                            >{colorOnFront === i ? "X" : "_"}</button>
-                        );
-                    })}
+                    <div className={"colors-menu-part"}>
+                        <div className={"description-inner-text"}>Top color:</div>
+                        {colorNumbersForTop.slice().map((i) => {
+                            return (
+                                <button
+                                    className={"color-button"}
+                                    onClick={() => {setColorOnTop(i)}}
+                                    style={{backgroundColor: colorOfNumber[i], color: ([1, 4].includes(i) ? "black" : "white")}}
+                                    key={i}
+                                >{colorOnTop === i ? "X" : "_"}</button>
+                            );
+                        })}
+                    </div>
+                    <div className={"colors-menu-part"}>
+                        <div className={"description-inner-text"}>Front color:</div>
+                        {colorNumbersForFront.slice().map((i) => {
+                            return (
+                                <button
+                                    className={"color-button"}
+                                    onClick={() => {setColorOnFront(i)}}
+                                    style={{height: "20px", width: "20px", backgroundColor: colorOfNumber[i], color: ([1, 4].includes(i) ? "black" : "white"), fontSize: "10px"}}
+                                    key={i}
+                                >{colorOnFront === i ? "X" : "_"}</button>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
             {tab ? (
@@ -131,6 +148,7 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
                     </ProgressBar>
                 </>
             )}
+            <br/>
             <div className={"algorithms"}>
                 {algorithms ?? ""}
             </div>

@@ -48,7 +48,7 @@ export default function App() {
     }
 
     function giveTrainingState(id, value) {
-        localStorage.setItem("learningStateDict", JSON.stringify(Array.from(trainingStatesDict.set(id, value))));
+        localStorage.setItem("trainingStatesDict", JSON.stringify(Array.from(trainingStatesDict.set(id, value))));
     }
 
     return (
@@ -79,13 +79,11 @@ export default function App() {
                     />
                 </div>
                 ) :
-                <div className="algorithms-list">
-                    <AlgorithmsList
-                        algorithmsData={algorithmsData}
-                        giveTrainingStateFunc={giveTrainingState}
-                        trainingStateDict={trainingStatesDict}
-                    />
-                </div>
+                <AlgorithmsList
+                    algorithmsData={algorithmsData}
+                    giveTrainingStateFunc={giveTrainingState}
+                    trainingStateDict={trainingStatesDict}
+                />
             }
         </>
 

@@ -19,7 +19,8 @@ export function ResultsList({ results, timerTab }) {
             <button
                 className={"custom-button"}
                 onClick={resetSession}
-            >X</button>
+                style={{margin: "10px"}}
+            >delete results</button>
             <ol className={"results-list"}>
                 {results[timerTab]?.map((result) => {
                         return (
