@@ -62,22 +62,22 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
 
     return (
         <div className="algorithms-list">
-            <div className={"algorithms-list-menu"}>
-                <div className={"tabs-menu"}>
-                    <button
-                        className={"custom-button"}
-                        disabled={!tab}
-                        onClick={() => {setTab(0)}}
-                    >PLLs</button>
-                    <button
-                        className={"custom-button"}
-                        disabled={tab}
-                        onClick={() => {setTab(1)}}
-                    >OLLs</button>
-                </div>
-                <div className={"colors-menu"}>
-                    <div className={"colors-menu-part"}>
-                        <div className={"description-inner-text"}>Top color:</div>
+            <div className={"tabs-menu"}>
+                <button
+                    className={"custom-button"}
+                    disabled={!tab}
+                    onClick={() => {setTab(0)}}
+                >PLLs</button>
+                <button
+                    className={"custom-button"}
+                    disabled={tab}
+                    onClick={() => {setTab(1)}}
+                >OLLs</button>
+            </div>
+            <div className={"colors-menu"}>
+                <div className={"colors-menu-part"}>
+                    <div className={"description-inner-text"}>Top color:</div>
+                    <div className={"color-buttons-row"}>
                         {colorNumbersForTop.slice().map((i) => {
                             return (
                                 <button
@@ -89,8 +89,10 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
                             );
                         })}
                     </div>
-                    <div className={"colors-menu-part"}>
-                        <div className={"description-inner-text"}>Front color:</div>
+                </div>
+                <div className={"colors-menu-part"}>
+                    <div className={"description-inner-text"}>Front color:</div>
+                    <div className={"color-buttons-row"}>
                         {colorNumbersForFront.slice().map((i) => {
                             return (
                                 <button

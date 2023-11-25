@@ -1,14 +1,14 @@
 
-- usuwanie i edycja rekordów na liście - popup window
-- zapisywanie +2 i DNF (różne rodzaje +2)
-- usuwanie wszystkich rekordów - popup window
-
+- zapisywanie +2 i DNF w logice timera
+- edycja popup dla algorytmów
 - kumulowanie ruchu u na początku algorytmu
 
 - scrollowanie list wyników
+- szybkie dodawanie +2
 - algorytmy w formie tabelki
-- położenie komponentów
 - opisy w gui
+- zapisywanie daty ułożenia
+- no results yet
 
 - statsy dla algorytmów
 - wykresy

@@ -340,10 +340,10 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }, [timerTab]);
 
     return (
-        <>
+        <div className="timer">
             {timerState <= 0 ? (
                 <>
-                    <div>
+                    <div className={"tabs-menu"}>
                         <button
                             className={"custom-button"}
                             disabled={!timerTab}
@@ -404,6 +404,6 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                     </div>
                 </>
             ) : ""}
-        </>
+        </div>
     );
 }

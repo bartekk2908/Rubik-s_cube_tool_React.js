@@ -54,30 +54,30 @@ export default function App() {
     return (
         <>
             {visibility ? (
-                <>
-                    <button
-                        className={"custom-button"}
-                        disabled={!moduleState}
-                        onClick={() => {setModuleState(0)}}
-                    >Timer</button>
-                    <button
-                        className={"custom-button"}
-                        disabled={moduleState}
-                        onClick={() => {setModuleState(1)}}
-                    >Algorithms</button>
-                </>
+                <div className={"app-menu"}>
+                    <div className={"app-menu-buttons"}>
+                        <button
+                            className={"custom-button"}
+                            disabled={!moduleState}
+                            onClick={() => {setModuleState(0)}}
+                        >Timer</button>
+                        <button
+                            className={"custom-button"}
+                            disabled={moduleState}
+                            onClick={() => {setModuleState(1)}}
+                        >Algorithms</button>
+                    </div>
+                </div>
             ) : ""}
             {moduleState === 0 ? (
-                <div className="timer">
-                    <Timer
-                        holdingSpaceTime={500}
-                        determineVisibilityFunc={determineVisibility}
-                        scrambleLength={20}
-                        results={[normalSolvingResults, PllResults, OllResults]}
-                        algorithmsData={algorithmsData}
-                        trainingStateDict={trainingStatesDict}
-                    />
-                </div>
+                <Timer
+                    holdingSpaceTime={500}
+                    determineVisibilityFunc={determineVisibility}
+                    scrambleLength={20}
+                    results={[normalSolvingResults, PllResults, OllResults]}
+                    algorithmsData={algorithmsData}
+                    trainingStateDict={trainingStatesDict}
+                />
                 ) :
                 <AlgorithmsList
                     algorithmsData={algorithmsData}

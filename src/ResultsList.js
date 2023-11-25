@@ -1,7 +1,11 @@
-import {formatTime} from "./extra_functions";
+import {Result} from "./Result";
 import {db} from "./db";
+import {PopupWindow} from "./PopupWindow";
+import {useState} from "react";
+
 
 export function ResultsList({ results, timerTab }) {
+    const [deletePopupOpened, setDeletePopupOpened] = useState(false);
 
     // After click in 'X' button reset saved data of solving or training
     function resetSession() {
@@ -16,23 +20,42 @@ export function ResultsList({ results, timerTab }) {
 
     return (
         <div className={"results-list-container"}>
-            <button
-                className={"custom-button"}
-                onClick={resetSession}
-                style={{margin: "10px"}}
-            >delete results</button>
+            <div className={"description-inner-text"}>
+                time:
+            </div>
             <ol className={"results-list"}>
                 {results[timerTab]?.map((result) => {
                         return (
-                            <li key={result.id}>
-                                <button className={"custom-button"} style={{width: "100px", }}>
-                                    {formatTime(result.time, true)}
-                                </button>
-                            </li>
+                            <Result
+                                result={result}
+                                timerTab={timerTab}
+                            />
                         );
                     }
                 )}
             </ol>
+            <button
+                className={"custom-button"}
+                onClick={() => {setDeletePopupOpened(true)}}
+                style={{margin: "10px"}}
+            >delete results</button>
+            <PopupWindow trigger={deletePopupOpened} closeFunc={() => {setDeletePopupOpened(false)}}>
+                <br/>
+                <br/>
+                <br/>
+                <div className={"popup-inner-content"}>
+                    <b>Are you sure to delete all results?</b>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <button
+                    onClick={() => {resetSession(); setDeletePopupOpened(false)}}
+                    className={"red-button"}
+                >delete all results</button>
+            </PopupWindow>
         </div>
     );
 }
