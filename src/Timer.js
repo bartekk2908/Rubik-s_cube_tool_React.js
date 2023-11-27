@@ -77,7 +77,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     function startTimer() {
         resetTimer();
         setTimerState(4);
-        setInspectionState(0);
+        // setInspectionState(0);
         setStartTime(Date.now());
     }
 
@@ -86,7 +86,16 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             if (byEsc) {
                 addNormalResult(false, false, true);
             } else {
-                addNormalResult(false, false, false);
+                switch (inspectionState) {
+                    case 4:
+                        addNormalResult(true, false, false);
+                        break;
+                    case 5:
+                        addNormalResult(false, false, true);
+                        break;
+                    default:
+                        addNormalResult(false, false, false);
+                }
             }
         } else {
             addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
@@ -345,17 +354,17 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                 <>
                     <div className={"tabs-menu"}>
                         <button
-                            className={"custom-button"}
+                            className={"custom-button orange-button"}
                             disabled={!timerTab}
                             onClick={() => {setTimerTab(0)}}
                         >Normal</button>
                         <button
-                            className={"custom-button"}
+                            className={"custom-button orange-button"}
                             disabled={timerTab === 1}
                             onClick={() => {setTimerTab(1)}}
                         >PLL</button>
                         <button
-                            className={"custom-button"}
+                            className={"custom-button orange-button"}
                             disabled={timerTab === 2}
                             onClick={() => {setTimerTab(2)}}
                         >OLL</button>
@@ -370,7 +379,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                         />
                     )}
                 </>
-            ) : ""}
+            ) : (
+                <>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                </>
+            )}
             <div className={"time"} style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" ))}}>
                 {((timerState === 2 || (timerState === 3 && withInspection && timerTab === 0)) ? (inspectionState < 4 ? Math.ceil(inspectionTime/100) : (inspectionState === 4 ? "+2" : "DNF")) :
                     ((timerState === 3 && (!withInspection || timerTab !== 0)) || (timerState === 1 )) ? "0.0" :

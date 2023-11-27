@@ -6,7 +6,7 @@ export function PopupWindow({ trigger, children, closeFunc }) {
             <div className={"popup"}>
                 <div className={"popup-inner"}>
                     <button
-                        className={"close-button custom-button"}
+                        className={"close-button custom-button orange-button"}
                         onClick={closeFunc}
                     >close</button>
                     {children}

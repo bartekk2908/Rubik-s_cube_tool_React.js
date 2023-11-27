@@ -5,7 +5,7 @@ export function ScrambleField({ scramble, updateScramble }) {
             <>
                 <div>
                     <button
-                        className={"custom-button"}
+                        className={"custom-button orange-button"}
                         onClick={updateScramble}
                     >next scramble</button>
                 </div>

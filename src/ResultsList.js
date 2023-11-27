@@ -35,7 +35,7 @@ export function ResultsList({ results, timerTab }) {
                 )}
             </ol>
             <button
-                className={"custom-button"}
+                className={"custom-button orange-button"}
                 onClick={() => {setDeletePopupOpened(true)}}
                 style={{margin: "10px"}}
             >delete results</button>
@@ -53,7 +53,7 @@ export function ResultsList({ results, timerTab }) {
                 <br/>
                 <button
                     onClick={() => {resetSession(); setDeletePopupOpened(false)}}
-                    className={"red-button"}
+                    className={"custom-button red-button"}
                 >delete all results</button>
             </PopupWindow>
         </div>

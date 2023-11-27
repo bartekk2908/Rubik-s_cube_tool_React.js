@@ -57,12 +57,12 @@ export default function App() {
                 <div className={"app-menu"}>
                     <div className={"app-menu-buttons"}>
                         <button
-                            className={"custom-button"}
+                            className={"custom-button orange-button"}
                             disabled={!moduleState}
                             onClick={() => {setModuleState(0)}}
                         >Timer</button>
                         <button
-                            className={"custom-button"}
+                            className={"custom-button orange-button"}
                             disabled={moduleState}
                             onClick={() => {setModuleState(1)}}
                         >Algorithms</button>

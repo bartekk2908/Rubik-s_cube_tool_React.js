@@ -1,10 +1,9 @@
 
-- zapisywanie +2 i DNF w logice timera
 - edycja popup dla algorytmów
 - kumulowanie ruchu u na początku algorytmu
+- szybkie dodawanie +2 i dnf
 
-- scrollowanie list wyników
-- szybkie dodawanie +2
+- styl scrolla
 - algorytmy w formie tabelki
 - opisy w gui
 - zapisywanie daty ułożenia

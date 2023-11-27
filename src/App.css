@@ -7,6 +7,9 @@
   --theme-color-2: #ff9933;
   --theme-color-3: #dd7711;
   --theme-color-4: #cc6600;
+  --danger-color-1: #b30000;
+  --danger-color-2: #990000;
+  --danger-color-3: #800000;
 }
 
 .body {
@@ -37,40 +40,42 @@
 /* Buttons */
 
 .custom-button {
-  background-color: var(--theme-color-2);
-  border-color: var(--theme-color-1);
   border-radius: 5px;
   font-weight: bold;
-  color: var(--text-color-1);
   padding: 6px 12px;
   cursor: pointer;
   margin: 0 1px;
-}
-
-.custom-button:active {
-  background-color: var(--theme-color-3);
 }
 
 .custom-button:disabled {
-  border: 1px solid var(--theme-color-2);
-  background-color: var(--theme-color-4);
   cursor: default;
 }
 
-.red-button {
-  background-color: #990000;
-  border-color: #b30000;
-  border-radius: 5px;
-  font-weight: bold;
+.orange-button {
+  background-color: var(--theme-color-2);
+  border-color: var(--theme-color-1);
   color: var(--text-color-1);
-  padding: 6px 12px;
-  cursor: pointer;
-  margin: 0 1px;
+}
+
+.orange-button:active {
+  background-color: var(--theme-color-3);
+}
+
+.orange-button:disabled {
+  border: 1px solid var(--theme-color-2);
+  background-color: var(--theme-color-3);
+}
+
+.red-button {
+  background-color: var(--danger-color-2);
+  border-color: var(--danger-color-1);
+  color: var(--text-color-1);
 }
 
 .red-button:active {
-  background-color: #800000;
+  background-color: var(--danger-color-3);
 }
+
 
 /* Timer */
 
@@ -95,6 +100,13 @@
   border-radius: 5px;
   width: 250px;
   padding: 10px 0;
+  position: fixed;
+  top: 56px;
+  left: 10px;
+  z-index: 9999;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 .results-list {
@@ -104,6 +116,7 @@
   font-weight: bold;
   margin: 10px 0;
   width: 200px;
+  overflow-y: scroll;
 }
 
 .popup {
@@ -151,6 +164,10 @@
   padding: 10px;
   height: fit-content;
   width: 150px;
+  position: fixed;
+  top: 56px;
+  right: 10px;
+  z-index: 9999;
 }
 
 
@@ -207,8 +224,7 @@
   width: 500px;
   margin: auto;
   margin-bottom: 20px;
-  border: 1px solid;
-  border-color: var(--theme-color-4);
+  border: 1px solid var(--theme-color-2);
 }
 
 .algorithms {

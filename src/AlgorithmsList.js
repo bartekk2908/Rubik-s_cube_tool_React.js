@@ -64,12 +64,12 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
         <div className="algorithms-list">
             <div className={"tabs-menu"}>
                 <button
-                    className={"custom-button"}
+                    className={"custom-button orange-button"}
                     disabled={!tab}
                     onClick={() => {setTab(0)}}
                 >PLLs</button>
                 <button
-                    className={"custom-button"}
+                    className={"custom-button orange-button"}
                     disabled={tab}
                     onClick={() => {setTab(1)}}
                 >OLLs</button>

@@ -9,7 +9,7 @@ export function Result({ result, timerTab }) {
     return (
         <li key={result.id}>
             <button
-                className={"custom-button"}
+                className={"custom-button orange-button"}
                 style={{width: "140px", }}
                 onClick={() => {setPopupOpened(true)}}
             >
@@ -57,7 +57,7 @@ export function Result({ result, timerTab }) {
                 </div>
                 <button
                     onClick={() => {timerTab ? (db.pll_oll_training_results.delete(result.id)) : (db.solving_results.delete(result.id)); setPopupOpened(false)}}
-                    className={"red-button"}
+                    className={"custom-button red-button"}
                 >delete result</button>
             </PopupWindow>
         </li>
