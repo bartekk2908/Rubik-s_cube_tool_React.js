@@ -254,7 +254,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
 
         const AUF = ['', 'U ', 'U2 ', "U' "];
         const algorithm = algorithmsData[id][1];
-        return (AUF[Math.floor(Math.random()*AUF.length)] + giveReversedSequence(algorithm) + AUF[Math.floor(Math.random()*AUF.length)]);
+        return (
+            AUF[Math.floor(Math.random()*AUF.length)] +
+            giveReversedSequence(algorithm) +
+            AUF[Math.floor(Math.random()*AUF.length)]
+        );
     }
 
     function giveReversedSequence(sequence) {
