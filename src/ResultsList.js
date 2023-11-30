@@ -21,9 +21,9 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
     // starting with scroll on top
     const scrollContainerRef = useRef(null);
     useEffect(() => {
-        if (scrollContainerRef.current) {
+        setTimeout(() => {
             scrollContainerRef.current.scrollTop = -1000;
-        }
+        }, 500);
     }, []);
 
     return (

@@ -106,27 +106,30 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         setStartTime(Date.now());
     }
 
-    function saveResult(givenTime, plusTwoTurn = false, dnf = false) {
+    function saveResult(plusTwoTurn = false, dnf = false) {
         setTimerState(0);
         if (timerTab === 0) {
             if (dnf) {
-                addNormalResult(givenTime,false, false, true);
+                addNormalResult(false, false, true);
             } else {
                 switch (inspectionState) {
                     case 4:
-                        addNormalResult(givenTime, true, plusTwoTurn, false);
+                        addNormalResult(true, plusTwoTurn, false);
                         break;
                     case 5:
-                        addNormalResult(givenTime, false, false, true);
+                        addNormalResult(false, false, true);
                         break;
                     default:
-                        addNormalResult(givenTime, false, plusTwoTurn, false);
+                        addNormalResult(false, plusTwoTurn, false);
                 }
             }
         } else {
-            addPllOllResult(givenTime, algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
+            addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
         }
         updateScramble();
+        setTimeout(() => {
+            setTime(time);
+        }, 1);
     }
 
     function resetTimer() {
@@ -149,11 +152,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }, [withInspection]);
 
     // Saving result after stopped timer
-    async function addNormalResult(givenTime, plusTwoInspection, plusTwoTurn, dnf) {
+    async function addNormalResult(plusTwoInspection, plusTwoTurn, dnf) {
         try {
             const id = await db.solving_results.add({
                 scramble: scrambleSequence,
-                time: givenTime,
+                time,
                 plusTwoInspection,
                 plusTwoTurn,
                 dnf,
@@ -162,11 +165,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             console.log("Error: " + error);
         }
     }
-    async function addPllOllResult(givenTime, algorithmName, algorithmType, algorithmSequence){
+    async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
         try {
             const id = await db.pll_oll_training_results.add({
                 scramble: scrambleSequence,
-                time: givenTime,
+                time,
                 algorithmName,
                 algorithmType,
                 algorithmSequence,
@@ -180,13 +183,17 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     useEffect(() => {
         if (spacePressed) {
             if (timerState === 4) {
-                setTimerState(5);
+                if (timerTab === 0) {
+                    setTimerState(5);
+                } else {
+                    saveResult();
+                }
             } else if (timerState === 0 && withInspection && timerTab === 0) {
                 setTimerState(1);
             } else if ((timerState === 0) || timerState === 2) {
                 setHoldingSpaceTimeout(setTimeout(() => {setTimerState(3);}, holdingSpaceTime));
             } else if (timerState === 5) {
-                saveResult(time);
+                saveResult();
             }
         } else {
             clearTimeout(holdingSpaceTimeout);
@@ -205,7 +212,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             if (timerState === 1 || timerState === 2 || timerState === 3) {
                 setTimerState(0);
             } else if (timerState === 4 || timerState === 5) {
-                saveResult(time, false, true);
+                saveResult(false, true);
             }
         }
     }, [escPressed]);
@@ -288,12 +295,14 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
 
         let reversedSequence = "";
         for (let i=0; i<moves.length; i++) {
-            if (moves[i].slice(-1) === "'") {
-                reversedSequence = moves[i].slice(0, -1) + " " + reversedSequence;
-            } else if (moves[i].slice(-1) === "2") {
-                reversedSequence = moves[i] + " " + reversedSequence;
-            } else {
-                reversedSequence = moves[i] + "' " + reversedSequence;
+            if (moves[i] !== "") {
+                if (moves[i].slice(-1) === "'") {
+                    reversedSequence = moves[i].slice(0, -1) + " " + reversedSequence;
+                } else if (moves[i].slice(-1) === "2") {
+                    reversedSequence = moves[i] + " " + reversedSequence;
+                } else {
+                    reversedSequence = moves[i] + "' " + reversedSequence;
+                }
             }
         }
         return reversedSequence;
@@ -307,6 +316,9 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             ["d", ["U", "y'"]],
             ["f", ["B", "z"]],
             ["b", ["F", "z'"]],
+            ["M", ["R", "L'"]],
+            ["E", ["U", "D'"]],
+            ["S", ["B", "F'"]],
         ]);
         const n = array.length;
         for(let i=n-1; i>=0; i--) {
@@ -438,15 +450,15 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             {timerState === 5 ? (
                 <div className={"under-timer-container"}>
                     <button
-                        onClick={() => {saveResult(time)}}
+                        onClick={() => {saveResult()}}
                         className={"custom-button orange-button"}
                     >OK</button>
                     <button
-                        onClick={() => {saveResult(time, true, false)}}
+                        onClick={() => {saveResult(true, false)}}
                         className={"custom-button orange-button"}
                     >+2</button>
                     <button
-                        onClick={() => {saveResult(time, false, true)}}
+                        onClick={() => {saveResult(false, true)}}
                         className={"custom-button orange-button"}
                     >DNF</button>
                 </div>

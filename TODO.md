@@ -1,8 +1,7 @@
 
 - edycja popup dla algorytmów
-- zapisywanie dnfów naprawić
 - uwzględnianie dnfów i +2 w statystykach
-- scrollbar naprawić
+- ustawienia grupy algorytmów
 
 - algorytmy w formie tabelki
 - opisy w gui
