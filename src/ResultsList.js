@@ -4,7 +4,7 @@ import {PopupWindow} from "./PopupWindow";
 import {useState} from "react";
 
 
-export function ResultsList({ results, timerTab }) {
+export function ResultsList({ results, timerTab, outerPopupOpened }) {
     const [deletePopupOpened, setDeletePopupOpened] = useState(false);
 
     // After click in 'X' button reset saved data of solving or training
@@ -19,7 +19,7 @@ export function ResultsList({ results, timerTab }) {
     }
 
     return (
-        <div className={"results-list-container"}>
+        <div className={"results-list-container"} style={{zIndex: (outerPopupOpened ? 4 : 6)}}>
             <div className={"description-inner-text"}>
                 time:
             </div>
@@ -40,17 +40,11 @@ export function ResultsList({ results, timerTab }) {
                 style={{margin: "10px"}}
             >delete results</button>
             <PopupWindow trigger={deletePopupOpened} closeFunc={() => {setDeletePopupOpened(false)}}>
-                <br/>
-                <br/>
-                <br/>
                 <div className={"popup-inner-content"}>
+                    <br/><br/><br/>
                     <b>Are you sure to delete all results?</b>
+                    <br/><br/><br/><br/><br/>
                 </div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
                 <button
                     onClick={() => {resetSession(); setDeletePopupOpened(false)}}
                     className={"custom-button red-button"}

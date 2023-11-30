@@ -1,7 +1,7 @@
 import {formatTime} from "./extra_functions";
 
-export function Stats({ results, scrambleType }) {
-    const times = results[scrambleType]?.map((result) => {
+export function Stats({ results, timerTab }) {
+    const times = results[timerTab]?.map((result) => {
         return (
             result.time
         );

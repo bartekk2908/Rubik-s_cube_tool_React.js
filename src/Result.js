@@ -4,21 +4,21 @@ import {PopupWindow} from "./PopupWindow";
 import {db} from "./db";
 
 export function Result({ result, timerTab }) {
-    const [popupOpened, setPopupOpened] = useState(false);
+    const [resultPopupOpened, setResultPopupOpened] = useState(false);
 
     return (
         <li key={result.id}>
             <button
                 className={"custom-button orange-button"}
                 style={{width: "140px", }}
-                onClick={() => {setPopupOpened(true)}}
+                onClick={() => {setResultPopupOpened(true)}}
             >
                 {(result.dnf ? "DNF (" : "") +
                     formatTime(result.time + (result.plusTwoInspection ? 200 : 0) + (result.plusTwoTurn ? 200 : 0), true) +
                     (result.plusTwoInspection || result.plusTwoTurn ? "+" : "") +
                     (result.dnf ? ")" : "")}
             </button>
-            <PopupWindow trigger={popupOpened} closeFunc={() => setPopupOpened(false)}>
+            <PopupWindow trigger={resultPopupOpened} closeFunc={() => setResultPopupOpened(false)}>
                 <div className={"popup-inner-content"}>
                     {timerTab ? "" : (
                         <>
@@ -56,7 +56,7 @@ export function Result({ result, timerTab }) {
                     <br/>
                 </div>
                 <button
-                    onClick={() => {timerTab ? (db.pll_oll_training_results.delete(result.id)) : (db.solving_results.delete(result.id)); setPopupOpened(false)}}
+                    onClick={() => {timerTab ? (db.pll_oll_training_results.delete(result.id)) : (db.solving_results.delete(result.id)); setResultPopupOpened(false)}}
                     className={"custom-button red-button"}
                 >delete result</button>
             </PopupWindow>

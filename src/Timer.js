@@ -6,7 +6,7 @@ import {ResultsList} from "./ResultsList";
 import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict }) {
+export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict, outerPopupOpened }) {
     const [scrambleSequence, setScrambleSequence] = useState(generateClassicScrambleSequence(scrambleLength));
     const [timerTab, setTimerTab] = useState(0);
     // 0 - Normal
@@ -121,7 +121,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }
 
     function changeInspection() {
-        const temp = !withInspection
+        const temp = !withInspection;
         setWithInspection(temp);
         localStorage.setItem("withInspection",  temp ? "1" : "0");
     }
@@ -361,7 +361,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                             className={"custom-button orange-button"}
                             disabled={!timerTab}
                             onClick={() => {setTimerTab(0)}}
-                        >Normal</button>
+                        >3x3</button>
                         <button
                             className={"custom-button orange-button"}
                             disabled={timerTab === 1}
@@ -393,7 +393,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                     ((timerState === 3 && (!withInspection || timerTab !== 0)) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
-            {inspectionMessages[inspectionState]}
+            {timerState === 2 ? inspectionMessages[inspectionState] : ""}
             {timerState <= 0 ? (
                 <>
                     {timerTab === 0 ? (
@@ -410,12 +410,12 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                         <ResultsList
                             results={results}
                             timerTab={timerTab}
+                            outerPopupOpened={outerPopupOpened}
                         />
                         {timerTab === 0 ? (
-
                             <Stats
                                 results={results}
-                                scrambleType={timerTab}
+                                timerTab={timerTab}
                             />
                         ) : ""}
                     </div>

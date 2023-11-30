@@ -6,6 +6,7 @@ import {Timer} from "./Timer";
 import {AlgorithmsList} from "./AlgorithmsList";
 import {useLiveQuery} from "dexie-react-hooks";
 import {db} from "./db";
+import {PopupWindow} from "./PopupWindow";
 
 const pathToExcelFile = "./excel/Algorithms.xlsx";
 
@@ -14,6 +15,11 @@ export default function App() {
     // 0 - timer
     // 1 - training CFOP algorithms
 
+    const [settingsPopupOpened, setSettingsPopupOpened] = useState(false);
+    const [settings, setSettings] = useState(
+        (localStorage.getItem('settings') === null ? new Map() :
+            new Map(JSON.parse(localStorage.getItem('settings'))))
+    );
     const [visibility, setVisibility] = useState(true);
     const [algorithmsData, setAlgorithmsData] = useState(null);
     const [trainingStatesDict, setTrainingStatesDict] = useState(
@@ -67,6 +73,33 @@ export default function App() {
                             onClick={() => {setModuleState(1)}}
                         >Algorithms</button>
                     </div>
+                    <div className={"app-menu-buttons"}>
+                        <button
+                            className={"custom-button orange-button"}
+                            onClick={() => {setSettingsPopupOpened(true)}}
+                        >Settings</button>
+                        <PopupWindow trigger={settingsPopupOpened} closeFunc={() => {setSettingsPopupOpened(false)}}>
+                            <br/>
+                            <div className={"popup-inner-content"}>
+                                <>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("withInspection") ?? false}
+                                        onChange={() => {
+                                            const temp = settings.get("withInspection") ?? false;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("withInspection", !temp))));
+                                        }}
+                                        className={"inspection-checkbox"}
+                                    /> inspection
+                                </>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </PopupWindow>
+                    </div>
                 </div>
             ) : ""}
             {moduleState === 0 ? (
@@ -77,6 +110,7 @@ export default function App() {
                     results={[normalSolvingResults, PllResults, OllResults]}
                     algorithmsData={algorithmsData}
                     trainingStateDict={trainingStatesDict}
+                    outerPopupOpened={settingsPopupOpened}
                 />
                 ) :
                 <AlgorithmsList
