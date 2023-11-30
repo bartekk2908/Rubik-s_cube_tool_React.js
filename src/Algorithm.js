@@ -36,9 +36,9 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainin
 
     return (
         <button
-            style={{display: "flex", backgroundColor: (trainingState === 0 ? "" : (trainingState === 1 ? "#ffff4d" : "lightgreen"))}}
+            style={{display: "flex"}}
             onClick={switchTrainingState}
-            className={"algorithm-area"}
+            className={"algorithm-area" + (trainingState ? (trainingState === 1 ? (" learning") : (" finished")) : (""))}
         >
             <AlgorithmFace
                 piecesScheme={piecesScheme}

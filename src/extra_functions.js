@@ -15,10 +15,10 @@ export function formatTime(time, withFullMilliseconds) {
 }
 
 // Takes training state dictionary and gives list of dictionary's keys that represent wanted value
-export function giveListOfChosenAlgorithms(wantedState, algorithmType, trainingStateDict, algorithmsData) {
+export function giveListOfChosenAlgorithms(wantedStates, algorithmType, trainingStateDict, algorithmsData) {
     let listOfChosen = [];
     for (const pair of trainingStateDict.entries()) {
-        if (pair[1] === wantedState && algorithmsData[pair[0]][23] === algorithmType) {
+        if (wantedStates.includes(pair[1]) && algorithmsData[pair[0]][23] === algorithmType) {
             listOfChosen.push(pair[0]);
         }
     }

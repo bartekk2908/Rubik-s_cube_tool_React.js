@@ -52,13 +52,13 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
         );
     });
 
-    const numberOfGreenPLLs = giveListOfChosenAlgorithms(2, "PLL", trainingStateDict, algorithmsData).length;
-    const numberOfYellowPLLs = giveListOfChosenAlgorithms(1, "PLL", trainingStateDict, algorithmsData).length;
-    const numberOfPLLs = numberOfGreenPLLs + numberOfYellowPLLs + giveListOfChosenAlgorithms(0, "PLL", trainingStateDict, algorithmsData).length;
+    const numberOfGreenPLLs = giveListOfChosenAlgorithms([2], "PLL", trainingStateDict, algorithmsData).length;
+    const numberOfYellowPLLs = giveListOfChosenAlgorithms([1], "PLL", trainingStateDict, algorithmsData).length;
+    const numberOfPLLs = numberOfGreenPLLs + numberOfYellowPLLs + giveListOfChosenAlgorithms([0], "PLL", trainingStateDict, algorithmsData).length;
 
-    const numberOfGreenOLLs = giveListOfChosenAlgorithms(2, "OLL", trainingStateDict, algorithmsData).length;
-    const numberOfYellowOLLs = giveListOfChosenAlgorithms(1, "OLL", trainingStateDict, algorithmsData).length;
-    const numberOfOLLs = numberOfGreenOLLs + numberOfYellowOLLs + giveListOfChosenAlgorithms(0, "OLL", trainingStateDict, algorithmsData).length;
+    const numberOfGreenOLLs = giveListOfChosenAlgorithms([2], "OLL", trainingStateDict, algorithmsData).length;
+    const numberOfYellowOLLs = giveListOfChosenAlgorithms([1], "OLL", trainingStateDict, algorithmsData).length;
+    const numberOfOLLs = numberOfGreenOLLs + numberOfYellowOLLs + giveListOfChosenAlgorithms([0], "OLL", trainingStateDict, algorithmsData).length;
 
     return (
         <div className="algorithms-list">

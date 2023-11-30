@@ -274,7 +274,19 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }
 
     function generateAlgorithmScrambleSequence() {
-        const listOfChosen = giveListOfChosenAlgorithms(1, (timerTab === 1 ? "PLL" : "OLL"), trainingStateDict, algorithmsData);
+        let wantedStates = [];
+        if ((settings.get("learningGroup") ?? true) || (settings.get("finishedGroup") ?? false )) {
+            if (settings.get("learningGroup")) {
+                wantedStates = wantedStates.concat([1]);
+            }
+            if (settings.get("finishedGroup")) {
+                wantedStates = wantedStates.concat([2]);
+            }
+        } else {
+            wantedStates = wantedStates.concat([0, 1, 2]);
+        }
+
+        const listOfChosen = giveListOfChosenAlgorithms(wantedStates, (timerTab === 1 ? "PLL" : "OLL"), trainingStateDict, algorithmsData);
         if (listOfChosen.length === 0) {
             return "";
         }
@@ -384,7 +396,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     useEffect(() => {
         setTimerState(0);
         updateScramble();
-    }, [timerTab]);
+    }, [timerTab, settings.get("learningGroup"), settings.get("finishedGroup")]);
 
     return (
         <div className="timer">
@@ -438,12 +450,10 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                         />
                     ) : ""}
                     {statsVisible ? (
-                        timerTab === 0 ? (
-                            <Stats
-                                results={results}
-                                timerTab={timerTab}
-                            />
-                        ) : ""
+                        <Stats
+                            results={results}
+                            timerTab={timerTab}
+                        />
                     ) : ""}
                 </div>
             ) : ""}

@@ -79,7 +79,6 @@ export default function App() {
                             onClick={() => {setSettingsPopupOpened(true)}}
                         >Settings</button>
                         <PopupWindow trigger={settingsPopupOpened} closeFunc={() => {setSettingsPopupOpened(false)}}>
-                            <br/>
                             <div className={"popup-inner-content"}>
                                 <div>
                                     <input
@@ -121,10 +120,29 @@ export default function App() {
                                         }}
                                     /> sound effects
                                 </div>
+                                <br/>
+                                <div>Algorithms:</div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("learningGroup") ?? true}
+                                        onChange={() => {
+                                            const temp = settings.get("learningGroup") ?? true;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("learningGroup", !temp))));
+                                        }}
+                                    /> <text className={"learning"} style={{color: "black"}}>learning</text>
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("finishedGroup") ?? false}
+                                        onChange={() => {
+                                            const temp = settings.get("finishedGroup") ?? false;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("finishedGroup", !temp))));
+                                        }}
+                                    /> <text className={"finished"} style={{color: "black"}}>finished</text>
+                                </div>
                             </div>
-                            <br/>
-                            <br/>
-                            <br/>
                             <br/>
                         </PopupWindow>
                     </div>

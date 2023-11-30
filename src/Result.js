@@ -20,7 +20,16 @@ export function Result({ result, timerTab }) {
             </button>
             <PopupWindow trigger={resultPopupOpened} closeFunc={() => setResultPopupOpened(false)}>
                 <div className={"popup-inner-content"}>
-                    {timerTab ? "" : (
+                    {timerTab ? (
+                        <>
+                            <div>
+                                name: <b> {result.algorithmName} </b>
+                            </div>
+                            <div>
+                                sequence: <b> {result.algorithmSequence} </b>
+                            </div>
+                        </>
+                    ) : (
                         <>
                             <div>
                                 <input

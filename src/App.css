@@ -168,7 +168,7 @@
     border-radius: 5px;
     padding: 10px;
     height: fit-content;
-    width: 150px;
+    width: 180px;
     position: fixed;
     top: 56px;
     right: 10px;
@@ -333,6 +333,15 @@
     background-color: green;
 }
 
+/* Colors for algorithms states */
+
+.learning {
+    background-color: #ffff4d;
+}
+
+.finished {
+    background-color: lightgreen;
+}
 
 /* Other */
 
