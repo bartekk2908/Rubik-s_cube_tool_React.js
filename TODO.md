@@ -1,8 +1,8 @@
 
 - edycja popup dla algorytmów
-- kumulowanie ruchu u na początku algorytmu
-- szybkie dodawanie +2 i dnf
-- sygnał dźwiękowy
+- zapisywanie dnfów naprawić
+- uwzględnianie dnfów i +2 w statystykach
+- scrollbar naprawić
 
 - algorytmy w formie tabelki
 - opisy w gui

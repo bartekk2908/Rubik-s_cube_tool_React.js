@@ -89,7 +89,6 @@ export default function App() {
                                             const temp = settings.get("withInspection") ?? false;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("withInspection", !temp))));
                                         }}
-                                        className={"inspection-checkbox"}
                                     /> inspection (for 3x3)
                                 </div>
                                 <div>
@@ -100,7 +99,6 @@ export default function App() {
                                             const temp = settings.get("resultList") ?? true;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("resultList", !temp))));
                                         }}
-                                        className={"inspection-checkbox"}
                                     /> results list
                                 </div>
                                 <div>
@@ -111,7 +109,6 @@ export default function App() {
                                             const temp = settings.get("stats") ?? true;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("stats", !temp))));
                                         }}
-                                        className={"inspection-checkbox"}
                                     /> statistics
                                 </div>
                                 <div>
@@ -122,7 +119,6 @@ export default function App() {
                                             const temp = settings.get("soundEffects") ?? false;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("soundEffects", !temp))));
                                         }}
-                                        className={"inspection-checkbox"}
                                     /> sound effects
                                 </div>
                             </div>

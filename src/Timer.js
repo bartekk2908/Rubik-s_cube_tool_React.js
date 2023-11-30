@@ -30,6 +30,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     // 2 - inspection time
     // 3 - is ready to start timer (holding space)
     // 4 - timer is running / solving time
+    // 5 - after solve to confirm solve was ok or not
 
     const [spacePressed, setSpacePressed] = useState(false);
     const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
@@ -105,27 +106,26 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         setStartTime(Date.now());
     }
 
-    function stopTimer(byEsc = false) {
+    function saveResult(givenTime, plusTwoTurn = false, dnf = false) {
+        setTimerState(0);
         if (timerTab === 0) {
-            if (byEsc) {
-                addNormalResult(false, false, true);
+            if (dnf) {
+                addNormalResult(givenTime,false, false, true);
             } else {
                 switch (inspectionState) {
                     case 4:
-                        addNormalResult(true, false, false);
+                        addNormalResult(givenTime, true, plusTwoTurn, false);
                         break;
                     case 5:
-                        addNormalResult(false, false, true);
+                        addNormalResult(givenTime, false, false, true);
                         break;
                     default:
-                        addNormalResult(false, false, false);
+                        addNormalResult(givenTime, false, plusTwoTurn, false);
                 }
             }
         } else {
-            addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
+            addPllOllResult(givenTime, algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
         }
-
-        setTimerState(0);
         updateScramble();
     }
 
@@ -144,12 +144,16 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         setInspectionTime(1500);
     }
 
+    useEffect(() => {
+        setInspectionState(0);
+    }, [withInspection]);
+
     // Saving result after stopped timer
-    async function addNormalResult(plusTwoInspection, plusTwoTurn, dnf) {
+    async function addNormalResult(givenTime, plusTwoInspection, plusTwoTurn, dnf) {
         try {
             const id = await db.solving_results.add({
                 scramble: scrambleSequence,
-                time,
+                time: givenTime,
                 plusTwoInspection,
                 plusTwoTurn,
                 dnf,
@@ -158,11 +162,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             console.log("Error: " + error);
         }
     }
-    async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
+    async function addPllOllResult(givenTime, algorithmName, algorithmType, algorithmSequence){
         try {
             const id = await db.pll_oll_training_results.add({
                 scramble: scrambleSequence,
-                time,
+                time: givenTime,
                 algorithmName,
                 algorithmType,
                 algorithmSequence,
@@ -176,11 +180,13 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     useEffect(() => {
         if (spacePressed) {
             if (timerState === 4) {
-                stopTimer();
+                setTimerState(5);
             } else if (timerState === 0 && withInspection && timerTab === 0) {
                 setTimerState(1);
             } else if ((timerState === 0) || timerState === 2) {
                 setHoldingSpaceTimeout(setTimeout(() => {setTimerState(3);}, holdingSpaceTime));
+            } else if (timerState === 5) {
+                saveResult(time);
             }
         } else {
             clearTimeout(holdingSpaceTimeout);
@@ -198,10 +204,8 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             clearTimeout(holdingSpaceTimeout);
             if (timerState === 1 || timerState === 2 || timerState === 3) {
                 setTimerState(0);
-            } else if (timerState === 4) {
-                stopTimer(true);
-            } else if (timerState === 0) {
-                // set DNF
+            } else if (timerState === 4 || timerState === 5) {
+                saveResult(time, false, true);
             }
         }
     }, [escPressed]);
@@ -411,27 +415,41 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                     ((timerState === 3 && (!withInspection || timerTab !== 0)) || (timerState === 1 )) ? "0.0" :
                         formatTime(time, (timerState !== 4)))}
             </div>
-            {timerState === 2 ? inspectionMessages[inspectionState] : ""}
+            {timerState === 2 || timerState === 3 ? inspectionMessages[inspectionState] : ""}
             {timerState <= 0 ? (
-                <>
-                    <div className={"under-timer-container"}>
-                        {resultListVisible ? (
-                            <ResultsList
+                <div className={"under-timer-container"}>
+                    {resultListVisible ? (
+                        <ResultsList
+                            results={results}
+                            timerTab={timerTab}
+                            outerPopupOpened={outerPopupOpened}
+                        />
+                    ) : ""}
+                    {statsVisible ? (
+                        timerTab === 0 ? (
+                            <Stats
                                 results={results}
                                 timerTab={timerTab}
-                                outerPopupOpened={outerPopupOpened}
                             />
-                        ) : ""}
-                        {statsVisible ? (
-                            timerTab === 0 ? (
-                                <Stats
-                                    results={results}
-                                    timerTab={timerTab}
-                                />
-                            ) : ""
-                        ) : ""}
-                    </div>
-                </>
+                        ) : ""
+                    ) : ""}
+                </div>
+            ) : ""}
+            {timerState === 5 ? (
+                <div className={"under-timer-container"}>
+                    <button
+                        onClick={() => {saveResult(time)}}
+                        className={"custom-button orange-button"}
+                    >OK</button>
+                    <button
+                        onClick={() => {saveResult(time, true, false)}}
+                        className={"custom-button orange-button"}
+                    >+2</button>
+                    <button
+                        onClick={() => {saveResult(time, false, true)}}
+                        className={"custom-button orange-button"}
+                    >DNF</button>
+                </div>
             ) : ""}
         </div>
     );

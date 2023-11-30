@@ -26,21 +26,39 @@ export function Result({ result, timerTab }) {
                                 <input
                                     type={"checkbox"}
                                     checked={result.plusTwoInspection}
-                                    onChange={() => {db.solving_results.update(result.id, {plusTwoInspection: !result.plusTwoInspection})}}
+                                    onChange={() => {
+                                        if (result.plusTwoInspection) {
+                                            db.solving_results.update(result.id, {plusTwoInspection: false});
+                                        } else {
+                                            db.solving_results.update(result.id, {plusTwoInspection: true, dnf: false});
+                                        }
+                                    }}
                                 /> +2 (inspection)
                             </div>
                             <div>
                                 <input
                                     type={"checkbox"}
                                     checked={result.plusTwoTurn}
-                                    onChange={() => {db.solving_results.update(result.id, {plusTwoTurn: !result.plusTwoTurn})}}
+                                    onChange={() => {
+                                        if (result.plusTwoTurn) {
+                                            db.solving_results.update(result.id, {plusTwoTurn: false});
+                                        } else {
+                                            db.solving_results.update(result.id, {plusTwoTurn: true, dnf: false});
+                                        }
+                                    }}
                                 /> +2 (one turn)
                             </div>
                             <div>
                                 <input
                                     type={"checkbox"}
                                     checked={result.dnf}
-                                    onChange={() => {db.solving_results.update(result.id, {dnf: !result.dnf})}}
+                                    onChange={() => {
+                                        if (result.dnf) {
+                                            db.solving_results.update(result.id, {dnf: false});
+                                        } else {
+                                            db.solving_results.update(result.id, {dnf: true, plusTwoInspection: false, plusTwoTurn: false});
+                                        }
+                                    }}
                                 /> DNF
                             </div>
                         </>

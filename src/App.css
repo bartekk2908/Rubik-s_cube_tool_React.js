@@ -96,8 +96,6 @@
 }
 
 .under-timer-container {
-    display: flex;
-    justify-content: space-between;
 }
 
 .results-list-container {
