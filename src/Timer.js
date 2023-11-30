@@ -6,7 +6,10 @@ import {ResultsList} from "./ResultsList";
 import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
 import {db} from "./db";
 
-export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict, outerPopupOpened }) {
+import sound1 from "./sounds/notification-sound-1.mp3"; //https://pixabay.com/sound-effects/
+import sound2 from "./sounds/notification-sound-2.mp3";
+
+export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict, outerPopupOpened, settings }) {
     const [scrambleSequence, setScrambleSequence] = useState(generateClassicScrambleSequence(scrambleLength));
     const [timerTab, setTimerTab] = useState(0);
     // 0 - Normal
@@ -32,7 +35,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     const [holdingSpaceTimeout, setHoldingSpaceTimeout] = useState(null);
     const [escPressed, setEscPressed] = useState(false);
 
-    const [withInspection, setWithInspection] = useState( localStorage.getItem("withInspection") === "1");
+    const withInspection = settings.get("withInspection") ?? false;
     const [inspectionTime, setInspectionTime] = useState(1500);
     const [inspectionStartTime, setInspectionStartTime] = useState(Date.now());
 
@@ -43,6 +46,9 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     // 3 - after 12 seconds
     // 4 - after 15 seconds (+2)
     // 5 - after 17 seconds (DNF)
+
+    const resultListVisible = settings.get("resultList") ?? true;
+    const statsVisible = settings.get("stats") ?? true;
 
     // Running timer
     useEffect(() => {
@@ -74,10 +80,28 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         return () => clearInterval(intervalId);
     }, [inspectionState, inspectionTime]);
 
+    // Playing sounds
+    useEffect(() => {
+        if (settings.get("soundEffects") ?? false) {
+            if (inspectionState === 2) {
+                playSound(1);
+            } else if (inspectionState === 3) {
+                playSound(2);
+            }
+        }
+    }, [inspectionState]);
+
+    function playSound(i) {
+        if (i === 1) {
+            new Audio(sound1).play();
+        } else {
+            new Audio(sound2).play();
+        }
+    }
+
     function startTimer() {
         resetTimer();
         setTimerState(4);
-        // setInspectionState(0);
         setStartTime(Date.now());
     }
 
@@ -118,12 +142,6 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
 
     function resetInspection() {
         setInspectionTime(1500);
-    }
-
-    function changeInspection() {
-        const temp = !withInspection;
-        setWithInspection(temp);
-        localStorage.setItem("withInspection",  temp ? "1" : "0");
     }
 
     // Saving result after stopped timer
@@ -396,27 +414,21 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             {timerState === 2 ? inspectionMessages[inspectionState] : ""}
             {timerState <= 0 ? (
                 <>
-                    {timerTab === 0 ? (
-                        <>
-                            <input
-                                type="checkbox"
-                                checked={withInspection}
-                                onChange={changeInspection}
-                                className={"inspection-checkbox"}
-                            /> inspection
-                        </>
-                    ) : ""}
                     <div className={"under-timer-container"}>
-                        <ResultsList
-                            results={results}
-                            timerTab={timerTab}
-                            outerPopupOpened={outerPopupOpened}
-                        />
-                        {timerTab === 0 ? (
-                            <Stats
+                        {resultListVisible ? (
+                            <ResultsList
                                 results={results}
                                 timerTab={timerTab}
+                                outerPopupOpened={outerPopupOpened}
                             />
+                        ) : ""}
+                        {statsVisible ? (
+                            timerTab === 0 ? (
+                                <Stats
+                                    results={results}
+                                    timerTab={timerTab}
+                                />
+                            ) : ""
                         ) : ""}
                     </div>
                 </>

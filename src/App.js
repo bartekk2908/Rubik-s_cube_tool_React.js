@@ -73,7 +73,7 @@ export default function App() {
                             onClick={() => {setModuleState(1)}}
                         >Algorithms</button>
                     </div>
-                    <div className={"app-menu-buttons"}>
+                    <div className={"app-settings-button-container"}>
                         <button
                             className={"custom-button orange-button"}
                             onClick={() => {setSettingsPopupOpened(true)}}
@@ -81,7 +81,7 @@ export default function App() {
                         <PopupWindow trigger={settingsPopupOpened} closeFunc={() => {setSettingsPopupOpened(false)}}>
                             <br/>
                             <div className={"popup-inner-content"}>
-                                <>
+                                <div>
                                     <input
                                         type="checkbox"
                                         checked={settings.get("withInspection") ?? false}
@@ -90,10 +90,42 @@ export default function App() {
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("withInspection", !temp))));
                                         }}
                                         className={"inspection-checkbox"}
-                                    /> inspection
-                                </>
+                                    /> inspection (for 3x3)
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("resultList") ?? true}
+                                        onChange={() => {
+                                            const temp = settings.get("resultList") ?? true;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("resultList", !temp))));
+                                        }}
+                                        className={"inspection-checkbox"}
+                                    /> results list
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("stats") ?? true}
+                                        onChange={() => {
+                                            const temp = settings.get("stats") ?? true;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("stats", !temp))));
+                                        }}
+                                        className={"inspection-checkbox"}
+                                    /> statistics
+                                </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("soundEffects") ?? false}
+                                        onChange={() => {
+                                            const temp = settings.get("soundEffects") ?? false;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("soundEffects", !temp))));
+                                        }}
+                                        className={"inspection-checkbox"}
+                                    /> sound effects
+                                </div>
                             </div>
-                            <br/>
                             <br/>
                             <br/>
                             <br/>
@@ -111,6 +143,7 @@ export default function App() {
                     algorithmsData={algorithmsData}
                     trainingStateDict={trainingStatesDict}
                     outerPopupOpened={settingsPopupOpened}
+                    settings={settings}
                 />
                 ) :
                 <AlgorithmsList

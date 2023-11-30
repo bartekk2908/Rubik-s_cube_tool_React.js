@@ -3,7 +3,6 @@
 - kumulowanie ruchu u na początku algorytmu
 - szybkie dodawanie +2 i dnf
 - sygnał dźwiękowy
-- popup opcje
 
 - algorytmy w formie tabelki
 - opisy w gui

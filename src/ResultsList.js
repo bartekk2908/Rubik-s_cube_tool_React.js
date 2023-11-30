@@ -1,8 +1,8 @@
+import {useState, useRef, useEffect} from "react";
+
 import {Result} from "./Result";
 import {db} from "./db";
 import {PopupWindow} from "./PopupWindow";
-import {useState} from "react";
-
 
 export function ResultsList({ results, timerTab, outerPopupOpened }) {
     const [deletePopupOpened, setDeletePopupOpened] = useState(false);
@@ -18,12 +18,20 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
         }
     }
 
+    // starting with scroll on top
+    const scrollContainerRef = useRef(null);
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = -1000;
+        }
+    }, []);
+
     return (
         <div className={"results-list-container"} style={{zIndex: (outerPopupOpened ? 4 : 6)}}>
             <div className={"description-inner-text"}>
                 time:
             </div>
-            <ol className={"results-list"}>
+            <ol className={"results-list"} ref={scrollContainerRef}>
                 {results[timerTab]?.map((result) => {
                         return (
                             <Result

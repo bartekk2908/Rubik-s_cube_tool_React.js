@@ -37,6 +37,11 @@
     margin: 5px;
 }
 
+.app-settings-button-container {
+    position: fixed;
+    top: 5px;
+    right: 10px;
+}
 
 /* Buttons */
 
@@ -147,6 +152,7 @@
 .popup-inner-content {
     font-size: 18px;
     color: var(--text-color-1);
+    text-align: center;
 }
 
 .close-button {
