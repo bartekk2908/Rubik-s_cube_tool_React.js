@@ -179,7 +179,9 @@
 
 .algorithms-list {
     text-align: center;
-    margin: 0 20px;
+    margin: 0 2px 0 20px;
+    overflow-y: scroll;
+    height: 92vh;
 }
 
 .algorithms-list-menu {
@@ -198,7 +200,7 @@
     border: 1px solid var(--theme-color-2);
     position: fixed;
     top: 56px;
-    right: 10px;
+    right: 25px;
     width: min-content;
     height: min-content;
 }

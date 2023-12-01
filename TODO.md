@@ -2,7 +2,6 @@
 - algorytmy w formie tabelki
 - statsy dla algorytmów
 - opisy w gui
-
 - zapisywanie daty ułożenia
 - no results yet
 - wykresy
