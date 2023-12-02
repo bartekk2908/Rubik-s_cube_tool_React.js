@@ -21,17 +21,29 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
     // starting with scroll on top
     const scrollContainerRef = useRef(null);
     useEffect(() => {
-        while (scrollContainerRef.current.scrollTop + scrollContainerRef.current.scrollHeight > 10) {
+        const delayTimeout = setTimeout(() => {
             scrollContainerRef.current.scrollTop = -scrollContainerRef.current.scrollHeight;
-        }
-        console.log(scrollContainerRef.current.scrollTop);
-    }, []);
+        }, 200)
+        return (() => {
+            clearTimeout(delayTimeout);
+        });
+    }, [results.length]);
+
+    useEffect(() => {
+        scrollContainerRef.current.scrollTop = -scrollContainerRef.current.scrollHeight;
+    }, [timerTab]);
 
     return (
         <div className={"results-list-container"} style={{zIndex: (outerPopupOpened ? 4 : 6)}}>
-            <div className={"description-inner-text"}>
-                time:
-            </div>
+            {results[timerTab]?.length !== 0 ? (
+                <div className={"description-inner-text"}>
+                    time:
+                </div>
+            ) : (
+                <div className={"description-inner-text"}>
+                    no results yet
+                </div>
+            )}
             <ol className={"results-list"} ref={scrollContainerRef}>
                 {results[timerTab]?.map((result) => {
                         return (
@@ -43,22 +55,29 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
                     }
                 )}
             </ol>
-            <button
-                className={"custom-button orange-button"}
-                onClick={() => {setDeletePopupOpened(true)}}
-                style={{margin: "10px"}}
-            >delete results</button>
-            <PopupWindow trigger={deletePopupOpened} closeFunc={() => {setDeletePopupOpened(false)}}>
-                <div className={"popup-inner-content"}>
-                    <br/><br/><br/>
-                    <b>Are you sure to delete all results?</b>
-                    <br/><br/><br/><br/><br/>
-                </div>
-                <button
-                    onClick={() => {resetSession(); setDeletePopupOpened(false)}}
-                    className={"custom-button red-button"}
-                >delete all results</button>
-            </PopupWindow>
+            {results[timerTab]?.length !== 0 ? (
+                <>
+                    <button
+                        className={"custom-button orange-button"}
+                        disabled={deletePopupOpened}
+                        onClick={() => {setDeletePopupOpened(true)}}
+                        style={{margin: "10px"}}
+                    >delete results</button>
+                    <PopupWindow trigger={deletePopupOpened} closeFunc={() => {setDeletePopupOpened(false)}}>
+                        <div className={"popup-inner-content"}>
+                            <br/><br/><br/>
+                            <b>Are you sure to delete all results?</b>
+                            <br/><br/><br/><br/><br/><br/><br/>
+                        </div>
+                        <button
+                            onClick={() => {resetSession(); setDeletePopupOpened(false)}}
+                            className={"custom-button red-button"}
+                        >delete all results</button>
+                    </PopupWindow>
+                </>
+            ) : (
+                ""
+            )}
         </div>
     );
 }

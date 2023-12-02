@@ -1,3 +1,5 @@
+
+/* Variables */
 :root {
     --full-length: 34px;
     --side-length: 12px;
@@ -43,6 +45,7 @@
     right: 10px;
 }
 
+
 /* Buttons */
 
 .custom-button {
@@ -52,7 +55,6 @@
     cursor: pointer;
     margin: 0 1px;
 }
-
 .custom-button:disabled {
     cursor: default;
 }
@@ -62,11 +64,9 @@
     border-color: var(--theme-color-1);
     color: var(--text-color-1);
 }
-
 .orange-button:active {
     background-color: var(--theme-color-3);
 }
-
 .orange-button:disabled {
     border: 1px solid var(--theme-color-2);
     background-color: var(--theme-color-3);
@@ -77,17 +77,39 @@
     border-color: var(--danger-color-1);
     color: var(--text-color-1);
 }
-
 .red-button:active {
     background-color: var(--danger-color-3);
 }
 
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--theme-color-2);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--theme-color-3);
+}
 
 /* Timer */
 
-.timer {
+.timer-tab {
     text-align: center;
     margin: 0 20px;
+}
+
+.tabs-menu {
+    margin: 10px;
+}
+
+.scramble-field {
+    margin: 20px 0;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .time {
@@ -106,8 +128,8 @@
     padding: 10px 0;
     position: fixed;
     top: 56px;
+    bottom: 10px;
     left: 10px;
-    height: 90%;
     display: flex;
     flex-direction: column;
 }
@@ -143,7 +165,7 @@
     background-color: var(--theme-color-1);
     border: 1px solid var(--theme-color-2);
     border-radius: 5px;
-    height: 300px;
+    height: 360px;
     font-weight: normal;
 }
 
@@ -177,21 +199,13 @@
 
 /* Algorithms List */
 
-.algorithms-list {
+.algorithms-tab {
+    position: fixed;
+    top: 52px;
+    bottom: 0;
     text-align: center;
     margin: 0 2px 0 20px;
     overflow-y: scroll;
-    height: 92vh;
-}
-
-.algorithms-list-menu {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.tabs-menu {
-    margin: 10px;
 }
 
 .colors-menu {
@@ -200,7 +214,7 @@
     border: 1px solid var(--theme-color-2);
     position: fixed;
     top: 56px;
-    right: 25px;
+    right: 15px;
     width: min-content;
     height: min-content;
 }
@@ -232,10 +246,11 @@
     border: 1px solid var(--theme-color-2);
 }
 
-.algorithms {
+.algorithms-list {
     display: flex;
     flex-wrap: wrap;
 }
+
 
 /* Algorithm */
 
@@ -255,13 +270,14 @@
     width: 140px;
 }
 
+
+/* Cube pieces */
+
 .cube-row:after {
     clear: both;
     content: '';
     display: table;
 }
-
-/* Cube pieces */
 
 .cube-piece {
     border: 1px solid #000;
@@ -346,4 +362,3 @@
 }
 
 /* Other */
-

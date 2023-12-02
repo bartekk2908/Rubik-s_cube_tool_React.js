@@ -15,6 +15,7 @@ export default function App() {
     // 0 - timer
     // 1 - training CFOP algorithms
 
+    const [helpPopupOpened, setHelpPopupOpened] = useState(false);
     const [settingsPopupOpened, setSettingsPopupOpened] = useState(false);
     const [settings, setSettings] = useState(
         (localStorage.getItem('settings') === null ? new Map() :
@@ -76,6 +77,7 @@ export default function App() {
                     <div className={"app-settings-button-container"}>
                         <button
                             className={"custom-button orange-button"}
+                            disabled={settingsPopupOpened}
                             onClick={() => {setSettingsPopupOpened(true)}}
                         >Settings</button>
                         <PopupWindow trigger={settingsPopupOpened} closeFunc={() => {setSettingsPopupOpened(false)}}>
@@ -88,8 +90,19 @@ export default function App() {
                                             const temp = settings.get("withInspection") ?? false;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("withInspection", !temp))));
                                         }}
-                                    /> inspection (for 3x3)
+                                    /> inspection
                                 </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("soundEffects") ?? false}
+                                        onChange={() => {
+                                            const temp = settings.get("soundEffects") ?? false;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("soundEffects", !temp))));
+                                        }}
+                                    /> inspection sound effects
+                                </div>
+                                <br/>
                                 <div>
                                     <input
                                         type="checkbox"
@@ -109,16 +122,6 @@ export default function App() {
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("stats", !temp))));
                                         }}
                                     /> statistics
-                                </div>
-                                <div>
-                                    <input
-                                        type="checkbox"
-                                        checked={settings.get("soundEffects") ?? false}
-                                        onChange={() => {
-                                            const temp = settings.get("soundEffects") ?? false;
-                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("soundEffects", !temp))));
-                                        }}
-                                    /> sound effects
                                 </div>
                                 <br/>
                                 <div>Algorithms:</div>
@@ -143,7 +146,16 @@ export default function App() {
                                     /> <text className={"finished"} style={{color: "black"}}>finished</text>
                                 </div>
                             </div>
-                            <br/>
+                        </PopupWindow>
+                        <button
+                            className={"custom-button orange-button"}
+                            disabled={helpPopupOpened}
+                            onClick={() => {setHelpPopupOpened(true)}}
+                        >Help</button>
+                        <PopupWindow trigger={helpPopupOpened} closeFunc={() => {setHelpPopupOpened(false)}}>
+                            <div className={"popup-inner-content"}>
+                                help content
+                            </div>
                         </PopupWindow>
                     </div>
                 </div>
@@ -156,7 +168,7 @@ export default function App() {
                     results={[normalSolvingResults, PllResults, OllResults]}
                     algorithmsData={algorithmsData}
                     trainingStateDict={trainingStatesDict}
-                    outerPopupOpened={settingsPopupOpened}
+                    outerPopupOpened={settingsPopupOpened || helpPopupOpened}
                     settings={settings}
                 />
                 ) :

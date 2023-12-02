@@ -61,7 +61,7 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
     const numberOfOLLs = numberOfGreenOLLs + numberOfYellowOLLs + giveListOfChosenAlgorithms([0], "OLL", trainingStateDict, algorithmsData).length;
 
     return (
-        <div className="algorithms-list">
+        <div className="algorithms-tab">
             <div className={"tabs-menu"}>
                 <button
                     className={"custom-button orange-button"}
@@ -151,7 +151,7 @@ export function AlgorithmsList({ algorithmsData, giveTrainingStateFunc, training
                 </>
             )}
             <br/>
-            <div className={"algorithms"}>
+            <div className={"algorithms-list"}>
                 {algorithms ?? ""}
             </div>
         </div>

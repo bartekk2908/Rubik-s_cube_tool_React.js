@@ -10,7 +10,8 @@ export function Result({ result, timerTab }) {
         <li key={result.id}>
             <button
                 className={"custom-button orange-button"}
-                style={{width: "140px", }}
+                style={{width: "140px"}}
+                disabled={resultPopupOpened}
                 onClick={() => {setResultPopupOpened(true)}}
             >
                 {(result.dnf ? "DNF (" : "") +
@@ -79,6 +80,10 @@ export function Result({ result, timerTab }) {
                     <br/>
                     <div>
                         scramble: <b> {result.scramble} </b>
+                    </div>
+                    <br/>
+                    <div>
+                        date: <b> {result.date} </b>
                     </div>
                     <br/>
                 </div>

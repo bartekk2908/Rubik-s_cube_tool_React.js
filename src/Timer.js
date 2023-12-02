@@ -154,12 +154,19 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     // Saving result after stopped timer
     async function addNormalResult(plusTwoInspection, plusTwoTurn, dnf) {
         try {
+            const date = new Date();
             const id = await db.solving_results.add({
                 scramble: scrambleSequence,
                 time,
                 plusTwoInspection,
                 plusTwoTurn,
                 dnf,
+                date: `${date.getHours().toString().padStart(2, '0')}:` +
+                    `${date.getMinutes().toString().padStart(2, '0')}:` +
+                    `${date.getSeconds().toString().padStart(2, '0')} ` +
+                    `${date.getDate().toString().padStart(2, '0')}-` +
+                    `${(date.getMonth() + 1).toString().padStart(2, '0')}-` +
+                    `${date.getFullYear()}`,
             });
         } catch (error) {
             console.log("Error: " + error);
@@ -167,12 +174,19 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }
     async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
         try {
+            const date = new Date();
             const id = await db.pll_oll_training_results.add({
                 scramble: scrambleSequence,
                 time,
                 algorithmName,
                 algorithmType,
                 algorithmSequence,
+                date: `${date.getHours().toString().padStart(2, '0')}:` +
+                    `${date.getMinutes().toString().padStart(2, '0')}:` +
+                    `${date.getSeconds().toString().padStart(2, '0')} ` +
+                    `${date.getDate().toString().padStart(2, '0')}-` +
+                    `${(date.getMonth() + 1).toString().padStart(2, '0')}-` +
+                    `${date.getFullYear()}`,
             });
         } catch (error) {
             console.log("Error: " + error);
@@ -399,7 +413,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }, [timerTab, settings.get("learningGroup"), settings.get("finishedGroup")]);
 
     return (
-        <div className="timer">
+        <div className="timer-tab">
             {timerState <= 0 ? (
                 <>
                     <div className={"tabs-menu"}>
@@ -431,7 +445,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                 </>
             ) : (
                 <>
-                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                 </>
             )}
             <div className={"time"} style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" ))}}>
