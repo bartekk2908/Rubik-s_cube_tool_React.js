@@ -415,37 +415,26 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     return (
         <div className="timer-tab">
             {timerState <= 0 ? (
-                <>
-                    <div className={"tabs-menu"}>
-                        <button
-                            className={"custom-button orange-button"}
-                            disabled={!timerTab}
-                            onClick={() => {setTimerTab(0)}}
-                        >3x3</button>
-                        <button
-                            className={"custom-button orange-button"}
-                            disabled={timerTab === 1}
-                            onClick={() => {setTimerTab(1)}}
-                        >PLL</button>
-                        <button
-                            className={"custom-button orange-button"}
-                            disabled={timerTab === 2}
-                            onClick={() => {setTimerTab(2)}}
-                        >OLL</button>
-                    </div>
-                    <br/>
-                    {timerState === -1 ? (
-                        <div>No algorithms selected</div>
-                    ) : (
-                        <ScrambleField
-                            scramble={scrambleSequence}
-                            updateScramble={updateScramble}
-                        />
-                    )}
-                </>
+                <div className={"tabs-menu"}>
+                    <button
+                        className={"custom-button orange-button big-button"}
+                        disabled={!timerTab}
+                        onClick={() => {setTimerTab(0)}}
+                    >3x3</button>
+                    <button
+                        className={"custom-button orange-button big-button"}
+                        disabled={timerTab === 1}
+                        onClick={() => {setTimerTab(1)}}
+                    >PLL</button>
+                    <button
+                        className={"custom-button orange-button big-button"}
+                        disabled={timerTab === 2}
+                        onClick={() => {setTimerTab(2)}}
+                    >OLL</button>
+                </div>
             ) : (
                 <>
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <br/><br/><br/><br/><br/><br/>
                 </>
             )}
             <div className={"time"} style={{color: (spacePressed ? (timerState === 3 ? "green" : "yellow") : (timerState === 2 ? "red" : "" ))}}>
@@ -469,6 +458,14 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                             timerTab={timerTab}
                         />
                     ) : ""}
+                    {timerState === -1 ? (
+                        <div>No algorithms selected</div>
+                    ) : (
+                        <ScrambleField
+                            scramble={scrambleSequence}
+                            updateScramble={updateScramble}
+                        />
+                    )}
                 </div>
             ) : ""}
             {timerState === 5 ? (

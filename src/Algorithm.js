@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
 
 import {AlgorithmFace} from "./AlgorithmFace";
+import {formatTime, averageOfLastX, giveBest} from "./extra_functions";
 
-export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainingStateFunc, trainingStateValue=0 }) {
+export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainingStateFunc, trainingStateValue=0, key, results }) {
     const [trainingState, setTrainingState] = useState(trainingStateValue);
     // 0 - new / not learned yet
     // 1 - training
@@ -14,7 +15,7 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainin
     const algorithmId = algorithmData[24];
     const piecesScheme = algorithmData.slice(2, 23);
 
-    // After click in algorithm area changes its state of training
+    // Clicking in algorithm area changes its state of training
     function switchTrainingState() {
         switch (trainingState) {
             case 0:
@@ -34,25 +35,50 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainin
         giveTrainingStateFunc(algorithmId, trainingState);
     }, [trainingState]);
 
+    const times = results.map((result) => {
+        return (result.time);
+    });
+
     return (
-        <button
-            style={{display: "flex"}}
-            onClick={switchTrainingState}
-            className={"algorithm-area" + (trainingState ? (trainingState === 1 ? (" learning") : (" finished")) : (""))}
+        <div
+            className={"algorithms-row" + (trainingState ? (trainingState === 1 ? (" learning") : (" finished")) : (""))}
+            key={key}
         >
-            <AlgorithmFace
-                piecesScheme={piecesScheme}
-                colorOnTop={colorOnTop}
-                colorOnFront={colorOnFront}
-            />
-            <div className={"algorithm-text"}>
+            <div className={"algorithms-cell algorithm-name algorithm-name-width"}>
+                <div>
+                    {algorithmName}
+                </div>
+            </div>
+            <button
+                className={"algorithms-cell algorithm-face-button"}
+                onClick={switchTrainingState}
+            >
+                <AlgorithmFace
+                    piecesScheme={piecesScheme}
+                    colorOnTop={colorOnTop}
+                    colorOnFront={colorOnFront}
+                />
+            </button>
+            <div className={"algorithms-cell algorithm-sequence algorithm-sequence-width"}>
                 <div>
                     {algorithmSequence}
                 </div>
-                <b>
-                    {algorithmType + " - " + algorithmName}
-                </b>
             </div>
-        </button>
+            <div className={"algorithms-cell algorithm-stat algorithm-stat-width"}>
+                <div>
+                    {times.length > 0 ? formatTime(giveBest(times)) : "-"}
+                </div>
+            </div>
+            <div className={"algorithms-cell algorithm-stat algorithm-stat-width"}>
+                <div>
+                    {times.length >= 12 ? formatTime(averageOfLastX(12, times)) : "-"}
+                </div>
+            </div>
+            <div className={"algorithms-cell algorithm-stat algorithm-stat-width"}>
+                <div>
+                    {times.length !== 0 ? formatTime(averageOfLastX(times.length, times, true)) : "-"}
+                </div>
+            </div>
+        </div>
     );
 }

@@ -3,7 +3,7 @@ import './App.css';
 import * as XLSX from "xlsx";
 
 import {Timer} from "./Timer";
-import {AlgorithmsList} from "./AlgorithmsList";
+import {AlgorithmsTab} from "./AlgorithmsTab";
 import {useLiveQuery} from "dexie-react-hooks";
 import {db} from "./db";
 import {PopupWindow} from "./PopupWindow";
@@ -80,7 +80,10 @@ export default function App() {
                             disabled={settingsPopupOpened}
                             onClick={() => {setSettingsPopupOpened(true)}}
                         >Settings</button>
-                        <PopupWindow trigger={settingsPopupOpened} closeFunc={() => {setSettingsPopupOpened(false)}}>
+                        <PopupWindow
+                            trigger={settingsPopupOpened}
+                            closeFunc={() => {setSettingsPopupOpened(false)}}
+                        >
                             <div className={"popup-inner-content"}>
                                 <div>
                                     <input
@@ -123,6 +126,16 @@ export default function App() {
                                         }}
                                     /> statistics
                                 </div>
+                                <div>
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.get("colorsMenu") ?? true}
+                                        onChange={() => {
+                                            const temp = settings.get("colorsMenu") ?? true;
+                                            localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("colorsMenu", !temp))));
+                                        }}
+                                    /> colors menu
+                                </div>
                                 <br/>
                                 <div>Algorithms:</div>
                                 <div>
@@ -152,9 +165,34 @@ export default function App() {
                             disabled={helpPopupOpened}
                             onClick={() => {setHelpPopupOpened(true)}}
                         >Help</button>
-                        <PopupWindow trigger={helpPopupOpened} closeFunc={() => {setHelpPopupOpened(false)}}>
+                        <PopupWindow
+                            trigger={helpPopupOpened}
+                            closeFunc={() => {setHelpPopupOpened(false)}}
+                            height={700}
+                            width={1000}
+                        >
                             <div className={"popup-inner-content"}>
-                                help content
+                                <div>
+                                    press and hold [spacebar] key to start timer or inspection
+                                </div>
+                                <div>
+                                    press [spacebar] key to stop timer
+                                </div>
+                                <div>
+                                    after solve: press [spacebar] key to (OK) result
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <div>
+                                    press [Esc] key to cancel inspection
+                                </div>
+                                <div>
+                                    press [Esc] key to stop timer with DNF result
+                                </div>
+                                <div>
+                                    after solve: press [Esc] key to (DNF) result
+                                </div>
                             </div>
                         </PopupWindow>
                     </div>
@@ -172,10 +210,12 @@ export default function App() {
                     settings={settings}
                 />
                 ) :
-                <AlgorithmsList
+                <AlgorithmsTab
                     algorithmsData={algorithmsData}
+                    results={[PllResults, OllResults]}
                     giveTrainingStateFunc={giveTrainingState}
                     trainingStateDict={trainingStatesDict}
+                    settings={settings}
                 />
             }
         </>

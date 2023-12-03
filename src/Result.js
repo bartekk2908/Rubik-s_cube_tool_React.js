@@ -26,6 +26,7 @@ export function Result({ result, timerTab }) {
                             <div>
                                 name: <b> {result.algorithmName} </b>
                             </div>
+                            <br/>
                             <div>
                                 sequence: <b> {result.algorithmSequence} </b>
                             </div>

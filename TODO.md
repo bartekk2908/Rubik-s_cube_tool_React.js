@@ -1,5 +1,6 @@
 
-- algorytmy w formie tabelki
 - statsy dla algorytmów
-- help content
+- uwzględnianie dnf i +2
+- jeżeli w preinspekcji dnf to nie potwierdzać
+- sortowanie tabelki
 - wykres

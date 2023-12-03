@@ -1,6 +1,6 @@
 
 // Takes time in 10 ms unit and gives string of formatted time to display
-export function formatTime(time, withFullMilliseconds) {
+export function formatTime(time=0, withFullMilliseconds=true) {
     const hours = Math.floor(time / 360_000);
     const minutes = Math.floor((time % 360_000) / 6_000);
     const seconds = Math.floor((time % 6_000) / 100);
@@ -50,4 +50,27 @@ export function giveColorOnLeft(topColor, frontColor) {
         allowedColors[(frontColor - 1 + step) % 6] === giveOppositeColor(topColor) ?
             (allowedColors[(frontColor - 1 + step * 2) % 6]) : (allowedColors[(frontColor - 1 + step) % 6])
     );
+}
+
+// Calculates average of x last results without best and worst results
+export function averageOfLastX(x, times, withoutBorderTimes=false) {
+    let ao = undefined;
+    if (times) {
+        if (times.length >= x) {
+            let lastX = times.slice(-x);
+            if (!withoutBorderTimes) {
+                const maxIndex = lastX.indexOf(Math.max(...lastX));
+                lastX.splice(maxIndex, 1);
+                const minIndex = lastX.indexOf(Math.min(...lastX));
+                lastX.splice(minIndex, 1);
+            }
+            ao = lastX.reduce((acc, value) => acc + value, 0) / lastX.length;
+        }
+    }
+    return ao;
+}
+
+// Gives best result
+export function giveBest(times) {
+    return (times?.length !== 0 ? Math.min(...times) : undefined);
 }
