@@ -1,5 +1,5 @@
 import {CubePiece} from "./CubePiece";
-import {colorOfNumber, giveOppositeColor, giveColorOnLeft} from "./extra_functions";
+import {colorOfNumber, giveOppositeColor, giveColorOnLeft} from "./functions";
 
 export function AlgorithmFace({piecesScheme, colorOnTop, colorOnFront}) {
     const colorForFace = {

@@ -53,18 +53,29 @@ export function giveColorOnLeft(topColor, frontColor) {
 }
 
 // Calculates average of x last results without best and worst results
-export function averageOfLastX(x, times, withoutBorderTimes=false) {
+export function averageOfLastX(x, times, normalAverage=false) {
     let ao = undefined;
     if (times) {
-        if (times.length >= x) {
-            let lastX = times.slice(-x);
-            if (!withoutBorderTimes) {
-                const maxIndex = lastX.indexOf(Math.max(...lastX));
-                lastX.splice(maxIndex, 1);
-                const minIndex = lastX.indexOf(Math.min(...lastX));
-                lastX.splice(minIndex, 1);
+        if (times.length !== 0) {
+            if (times.length >= x) {
+                let lastX = times.slice(-x);
+                if (!normalAverage) {
+                    const maxIndex = lastX.indexOf(Math.max(...lastX));
+                    lastX.splice(maxIndex, 1);
+                    const minIndex = lastX.indexOf(Math.min(...lastX));
+                    lastX.splice(minIndex, 1);
+                    if (lastX.includes(Infinity)) {
+                        return undefined;
+                    }
+                }
+                ao = lastX.reduce((acc, value) => {
+                    if (value === Infinity) {
+                        return (acc);
+                    } else {
+                        return (acc + value);
+                    }
+                }, 0) / lastX.length;
             }
-            ao = lastX.reduce((acc, value) => acc + value, 0) / lastX.length;
         }
     }
     return ao;
@@ -72,5 +83,7 @@ export function averageOfLastX(x, times, withoutBorderTimes=false) {
 
 // Gives best result
 export function giveBest(times) {
-    return (times?.length !== 0 ? Math.min(...times) : undefined);
+    if (times) {
+        return (times.length !== 0 ? Math.min(...times) : undefined);
+    }
 }

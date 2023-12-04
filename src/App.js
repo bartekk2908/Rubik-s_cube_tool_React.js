@@ -146,7 +146,11 @@ export default function App() {
                                             const temp = settings.get("learningGroup") ?? true;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("learningGroup", !temp))));
                                         }}
-                                    /> <text className={"learning"} style={{color: "black"}}>learning</text>
+                                    />
+                                    <span
+                                        className={"learning"}
+                                        style={{color: "black"}}
+                                    >learning</span>
                                 </div>
                                 <div>
                                     <input
@@ -156,7 +160,11 @@ export default function App() {
                                             const temp = settings.get("finishedGroup") ?? false;
                                             localStorage.setItem("settings", JSON.stringify(Array.from(settings.set("finishedGroup", !temp))));
                                         }}
-                                    /> <text className={"finished"} style={{color: "black"}}>finished</text>
+                                    />
+                                    <span
+                                        className={"finished"}
+                                        style={{color: "black"}}
+                                    >finished</span>
                                 </div>
                             </div>
                         </PopupWindow>

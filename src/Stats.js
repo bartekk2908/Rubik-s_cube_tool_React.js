@@ -1,31 +1,57 @@
-import {formatTime, averageOfLastX, giveBest} from "./extra_functions";
+import {formatTime, averageOfLastX, giveBest} from "./functions";
 
-export function Stats({ results, timerTab }) {
+export function Stats({ results, timerTab, algorithmsData }) {
     const times = results[timerTab]?.map((result) => {
-        return (
-            result.time
-        );
+        if (result.dnf) {
+            return Infinity;
+        }
+        let penalty = 0;
+        if (result.plusTwoInspection) {
+            penalty += 200;
+        }
+        if (result.plusTwoTurn) {
+            penalty += 200;
+        }
+        return (result.time + penalty);
     });
     const ao5 = averageOfLastX(5, times);
     const ao12 = averageOfLastX(12, times);
     const averageAll = averageOfLastX(times?.length, times, true);
     const best = giveBest(times);
 
-    function giveBestAlgorithm() {
-        return results[timerTab].reduce((prev, curr) => prev.time > curr.time ? prev : curr).algorithmName;
+    function giveBestAndWorstAlgorithm() {
+        const chosenAlgorithmsData = algorithmsData.filter((algorithmData) => algorithmData[23] === ["", "PLL", "OLL"][timerTab])
+        const averages = new Map();
+        for (let i=0; i<chosenAlgorithmsData.length; i++) {
+            const algorithmTimes = results[timerTab].filter((result) => result.algorithmName === chosenAlgorithmsData[i][0]).map((result) => result.time);
+            averages.set(chosenAlgorithmsData[i][0], averageOfLastX(algorithmTimes?.length, algorithmTimes, true) / chosenAlgorithmsData[i][1].split(" ").length)
+        }
+        console.log(averages);
+        let minAlgorithm = undefined;
+        let maxAlgorithm = undefined;
+        for (const [key, value] of averages.entries()) {
+            if (minAlgorithm === undefined && maxAlgorithm === undefined) {
+                minAlgorithm = key;
+                maxAlgorithm = key;
+            }
+            if (averages.get(minAlgorithm) > value) {
+                minAlgorithm = key;
+            }
+            if (averages.get(maxAlgorithm) < value) {
+                maxAlgorithm = key;
+            }
+        }
+        return ([minAlgorithm, maxAlgorithm]);
     }
 
-    function giveWorstAlgorithm() {
-        return results[timerTab].reduce((prev, curr) => prev.time < curr.time ? prev : curr).algorithmName;
-    }
 
     return (
         <div className={"stats"}>
             <div>best: {best ? formatTime(best, true) : "-"}</div>
             {timerTab ? (
                 <>
-                    <div>best algorithm: {results[timerTab].length !== 0 ? giveBestAlgorithm() : "-"}</div>
-                    <div>worst algorithm: {results[timerTab].length !== 0 ? giveWorstAlgorithm() : "-"}</div>
+                    <div>best algorithm: {results[timerTab].length !== 0 ? giveBestAndWorstAlgorithm()[0] : "-"}</div>
+                    <div>worst algorithm: {results[timerTab].length !== 0 ? giveBestAndWorstAlgorithm()[1] : "-"}</div>
                 </>
             ) : (
                 <>

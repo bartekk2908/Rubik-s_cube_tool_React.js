@@ -50,6 +50,7 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
                             <Result
                                 result={result}
                                 timerTab={timerTab}
+                                key={result.id}
                             />
                         );
                     }

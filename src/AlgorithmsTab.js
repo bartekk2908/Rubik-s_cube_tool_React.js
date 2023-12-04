@@ -2,7 +2,7 @@ import {useEffect, useState, useRef} from "react";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {Algorithm} from "./Algorithm";
-import {colorOfNumber, giveListOfChosenAlgorithms, giveOppositeColor} from "./extra_functions";
+import {colorOfNumber, giveListOfChosenAlgorithms, giveOppositeColor} from "./functions";
 
 export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingStateDict, settings, results }) {
     const [colorOnTop, setColorOnTop] = useState(+localStorage.getItem("colorOnTop") || 1);
@@ -10,8 +10,6 @@ export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingS
     const [tab, setTab] = useState(0);
     // 0 - PLLs
     // 1 - OLLs
-    const tabNames = ["PLL", "OLL"];
-
     const colorsMenuVisible = settings.get("colorsMenu") ?? true;
 
     const colorNumbersForTop = [1, 2, 3, 4, 5, 6];
@@ -38,7 +36,7 @@ export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingS
     // Map algorithms data to display cases with sequence
     const algorithms = algorithmsData?.map((algorithmData, i) => {
         return (
-            algorithmData[23] === tabNames[tab] ? (
+            algorithmData[23] === ["PLL", "OLL"][tab] ? (
                 <Algorithm
                     algorithmData={algorithmData}
                     colorOnTop={colorOnTop}

@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 
 import {AlgorithmFace} from "./AlgorithmFace";
-import {formatTime, averageOfLastX, giveBest} from "./extra_functions";
+import {formatTime, averageOfLastX, giveBest} from "./functions";
 
 export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainingStateFunc, trainingStateValue=0, key, results }) {
     const [trainingState, setTrainingState] = useState(trainingStateValue);

@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {ScrambleField} from "./ScrambleField";
 import {Stats} from "./Stats";
 import {ResultsList} from "./ResultsList";
-import {formatTime, giveListOfChosenAlgorithms} from "./extra_functions";
+import {formatTime, giveListOfChosenAlgorithms} from "./functions";
 import {db} from "./db";
 
 import sound1 from "./sounds/notification-sound-1.mp3"; //https://pixabay.com/sound-effects/
@@ -85,20 +85,12 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     useEffect(() => {
         if (settings.get("soundEffects") ?? false) {
             if (inspectionState === 2) {
-                playSound(1);
+                new Audio(sound1).play();
             } else if (inspectionState === 3) {
-                playSound(2);
+                new Audio(sound2).play();
             }
         }
     }, [inspectionState]);
-
-    function playSound(i) {
-        if (i === 1) {
-            new Audio(sound1).play();
-        } else {
-            new Audio(sound2).play();
-        }
-    }
 
     function startTimer() {
         resetTimer();
@@ -198,7 +190,11 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
         if (spacePressed) {
             if (timerState === 4) {
                 if (timerTab === 0) {
-                    setTimerState(5);
+                    if (inspectionState !== 5) {
+                        setTimerState(5);
+                    } else {
+                        saveResult(false, true);
+                    }
                 } else {
                     saveResult();
                 }
@@ -456,6 +452,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                         <Stats
                             results={results}
                             timerTab={timerTab}
+                            algorithmsData={algorithmsData}
                         />
                     ) : ""}
                     {timerState === -1 ? (

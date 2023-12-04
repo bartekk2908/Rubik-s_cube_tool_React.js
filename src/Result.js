@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {formatTime} from "./extra_functions";
+import {formatTime} from "./functions";
 import {PopupWindow} from "./PopupWindow";
 import {db} from "./db";
 
@@ -7,7 +7,7 @@ export function Result({ result, timerTab }) {
     const [resultPopupOpened, setResultPopupOpened] = useState(false);
 
     return (
-        <li key={result.id}>
+        <li>
             <button
                 className={"custom-button orange-button"}
                 style={{width: "140px"}}
