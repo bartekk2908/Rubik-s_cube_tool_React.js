@@ -26,7 +26,6 @@ export function Stats({ results, timerTab, algorithmsData }) {
             const algorithmTimes = results[timerTab].filter((result) => result.algorithmName === chosenAlgorithmsData[i][0]).map((result) => result.time);
             averages.set(chosenAlgorithmsData[i][0], averageOfLastX(algorithmTimes?.length, algorithmTimes, true) / chosenAlgorithmsData[i][1].split(" ").length)
         }
-        console.log(averages);
         let minAlgorithm = undefined;
         let maxAlgorithm = undefined;
         for (const [key, value] of averages.entries()) {
