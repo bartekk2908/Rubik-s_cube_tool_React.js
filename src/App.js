@@ -15,6 +15,10 @@ export default function App() {
     // 0 - timer
     // 1 - training CFOP algorithms
 
+    const [algorithmsTab, setAlgorithmsTab] = useState(0);
+    // 0 - PLLs
+    // 1 - OLLs
+
     const [helpPopupOpened, setHelpPopupOpened] = useState(false);
     const [settingsPopupOpened, setSettingsPopupOpened] = useState(false);
     const [settings, setSettings] = useState(
@@ -176,7 +180,7 @@ export default function App() {
                         <PopupWindow
                             trigger={helpPopupOpened}
                             closeFunc={() => {setHelpPopupOpened(false)}}
-                            height={700}
+                            height={650}
                             width={1000}
                         >
                             <div className={"popup-inner-content"}>
@@ -193,7 +197,7 @@ export default function App() {
                                     press [Esc] key to cancel inspection
                                 </div>
                                 <div className={"description-inner-text"}>
-                                    while timer's running:
+                                    while timer is running:
                                 </div>
                                 <div>
                                     press [spacebar] key to stop timer
@@ -260,6 +264,8 @@ export default function App() {
                     giveTrainingStateFunc={giveTrainingState}
                     trainingStateDict={trainingStatesDict}
                     settings={settings}
+                    startTab={algorithmsTab}
+                    setStartTab={setAlgorithmsTab}
                 />
             }
         </>

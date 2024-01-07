@@ -23,7 +23,7 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
     useEffect(() => {
         const delayTimeout = setTimeout(() => {
             scrollContainerRef.current.scrollTop = -scrollContainerRef.current.scrollHeight;
-        }, 200)
+        }, 300)
         return (() => {
             clearTimeout(delayTimeout);
         });

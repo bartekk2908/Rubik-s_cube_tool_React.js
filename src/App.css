@@ -5,7 +5,7 @@
     --side-length: 12px;
     --bg-color: #ffffcc;
     --text-color-1: #ffffff;
-    --theme-color-1: #ffbf80;
+    --theme-color-1: #ffa854;
     --theme-color-2: #ff9933;
     --theme-color-3: #dd7711;
     --theme-color-4: #cc6600;
@@ -148,8 +148,9 @@
     flex-direction: column-reverse;
     color: var(--text-color-1);
     font-weight: bold;
-    margin: 10px 0;
-    width: 200px;
+    margin: 10px 10px 10px 0;
+    padding-left: 60px;
+    width: auto;
     overflow-y: scroll;
 }
 

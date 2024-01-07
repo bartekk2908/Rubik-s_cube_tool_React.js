@@ -4,10 +4,10 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import {Algorithm} from "./Algorithm";
 import {colorOfNumber, giveListOfChosenAlgorithms, giveOppositeColor} from "./functions";
 
-export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingStateDict, settings, results }) {
+export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingStateDict, settings, results, startTab, setStartTab }) {
     const [colorOnTop, setColorOnTop] = useState(+localStorage.getItem("colorOnTop") || 1);
     const [colorOnFront, setColorOnFront] = useState(+localStorage.getItem("colorOnFront") || 2);
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(startTab);
     // 0 - PLLs
     // 1 - OLLs
     const colorsMenuVisible = settings.get("colorsMenu") ?? true;
@@ -66,12 +66,18 @@ export function AlgorithmsTab({ algorithmsData, giveTrainingStateFunc, trainingS
                 <button
                     className={"custom-button orange-button big-button"}
                     disabled={!tab}
-                    onClick={() => {setTab(0)}}
+                    onClick={() => {
+                        setTab(0);
+                        setStartTab(0);
+                    }}
                 >PLL</button>
                 <button
                     className={"custom-button orange-button big-button"}
                     disabled={tab}
-                    onClick={() => {setTab(1)}}
+                    onClick={() => {
+                        setTab(1);
+                        setStartTab(1);
+                    }}
                 >OLL</button>
             </div>
             {colorsMenuVisible ? (

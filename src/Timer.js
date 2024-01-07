@@ -116,7 +116,9 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
                 }
             }
         } else {
-            addPllOllResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
+            if (!dnf) {
+                addAlgorithmResult(algorithmsData[algorithmId][0], algorithmsData[algorithmId][23], algorithmsData[algorithmId][1]);
+            }
         }
         updateScramble();
         setTimeout(() => {
@@ -164,7 +166,7 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             console.log("Error: " + error);
         }
     }
-    async function addPllOllResult(algorithmName, algorithmType, algorithmSequence){
+    async function addAlgorithmResult(algorithmName, algorithmType, algorithmSequence){
         try {
             const date = new Date();
             const id = await db.pll_oll_training_results.add({
