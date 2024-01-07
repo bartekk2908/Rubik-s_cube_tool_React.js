@@ -46,7 +46,6 @@ export function Stats({ results, timerTab, algorithmsData }) {
 
     return (
         <div className={"stats"}>
-            <div>best: {best ? formatTime(best, true) : "-"}</div>
             {timerTab ? (
                 <>
                     <div>best algorithm: {results[timerTab].length !== 0 ? giveBestAndWorstAlgorithm()[0] : "-"}</div>
@@ -54,11 +53,12 @@ export function Stats({ results, timerTab, algorithmsData }) {
                 </>
             ) : (
                 <>
+                    <div>best: {best ? formatTime(best, true) : "-"}</div>
                     <div>ao5: {ao5 ? formatTime(Math.round(ao5), true) : "-"}</div>
                     <div>ao12: {ao12 ? formatTime(Math.round(ao12), true) : "-"}</div>
+                    <div>average: {averageAll ? formatTime(Math.round(averageAll), true) : "-"}</div>
                 </>
             )}
-            <div>average: {averageAll ? formatTime(Math.round(averageAll), true) : "-"}</div>
         </div>
     );
 }
