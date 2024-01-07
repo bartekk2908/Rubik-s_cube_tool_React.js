@@ -17,7 +17,9 @@ export function Result({ result, timerTab }) {
                 {(result.dnf ? "DNF (" : "") +
                     formatTime(result.time + (result.plusTwoInspection ? 200 : 0) + (result.plusTwoTurn ? 200 : 0), true) +
                     (result.plusTwoInspection || result.plusTwoTurn ? "+" : "") +
-                    (result.dnf ? ")" : "")}
+                    (result.dnf ? ")" : "") +
+                    (timerTab ? (" - " + result.algorithmName) : "")
+                }
             </button>
             <PopupWindow trigger={resultPopupOpened} closeFunc={() => setResultPopupOpened(false)}>
                 <div className={"popup-inner-content"}>

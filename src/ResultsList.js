@@ -35,15 +35,17 @@ export function ResultsList({ results, timerTab, outerPopupOpened }) {
 
     return (
         <div className={"results-list-container"} style={{zIndex: (outerPopupOpened ? 4 : 6)}}>
-            {results[timerTab]?.length !== 0 ? (
-                <div className={"description-inner-text"}>
-                    time:
-                </div>
-            ) : (
-                <div className={"description-inner-text"}>
-                    no results yet
-                </div>
-            )}
+            <div className={"description-inner-text"}>
+                {results[timerTab]?.length !== 0 ? (
+                    timerTab ? (
+                        "time - name"
+                    ) : (
+                        "time"
+                    )
+                ) : (
+                    "no results yet"
+                )}
+            </div>
             <ol className={"results-list"} ref={scrollContainerRef}>
                 {results[timerTab]?.map((result) => {
                         return (

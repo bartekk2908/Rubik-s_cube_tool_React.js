@@ -266,7 +266,6 @@
 .algorithms-row {
     border: 1px solid var(--theme-color-1);
     display: flex;
-    background-color: #f0f2f4;
     margin: -1px 0 0 0;
 }
 
@@ -405,6 +404,10 @@
 }
 
 /* Colors for algorithms states */
+
+.not-being-learned {
+    background-color: #f0f2f4;
+}
 
 .learning {
     background-color: #fefe7c;

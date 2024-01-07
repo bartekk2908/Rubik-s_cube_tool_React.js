@@ -41,7 +41,7 @@ export function Algorithm({ algorithmData, colorOnTop, colorOnFront, giveTrainin
 
     return (
         <div
-            className={"algorithms-row" + (trainingState ? (trainingState === 1 ? (" learning") : (" finished")) : (""))}
+            className={"algorithms-row " + (trainingState ? (trainingState === 1 ? ("learning") : ("finished")) : ("not-being-learned"))}
             key={key}
         >
             <div className={"algorithms-cell algorithm-name algorithm-name-width"}>

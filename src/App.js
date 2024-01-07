@@ -180,26 +180,62 @@ export default function App() {
                             width={1000}
                         >
                             <div className={"popup-inner-content"}>
+                                <div className={"description-inner-text"}>
+                                    TIMER SHORTCUTS
+                                </div>
                                 <div>
-                                    press and hold [spacebar] key to start timer or inspection
+                                    press [spacebar] key to start inspection
+                                </div>
+                                <div>
+                                    press and hold [spacebar] key to start timer
+                                </div>
+                                <div>
+                                    press [Esc] key to cancel inspection
+                                </div>
+                                <div className={"description-inner-text"}>
+                                    while timer's running:
                                 </div>
                                 <div>
                                     press [spacebar] key to stop timer
                                 </div>
                                 <div>
-                                    after solve: press [spacebar] key to (OK) result
+                                    press [Esc] key to cancel solve with DNF result
+                                </div>
+                                <div className={"description-inner-text"}>
+                                    after solve:
                                 </div>
                                 <div>
+                                    press [spacebar] key to (OK) result
+                                </div>
+                                <div>
+                                    press [Esc] key to (DNF) result
+                                </div>
+                                <div className={"description-inner-text"}>
                                     <br/>
                                 </div>
-                                <div>
-                                    press [Esc] key to cancel inspection
+                                <div className={"description-inner-text"}>
+                                    ALGORITHMS
                                 </div>
                                 <div>
-                                    press [Esc] key to stop timer with DNF result
+                                    click on cube face in CASE column to change case's state
                                 </div>
                                 <div>
-                                    after solve: press [Esc] key to (DNF) result
+                                    <span
+                                        className={"not-being-learned"}
+                                        style={{color: "black"}}
+                                    >white</span> state - this case wasn't being learned yet
+                                </div>
+                                <div>
+                                    <span
+                                        className={"learning"}
+                                        style={{color: "black"}}
+                                    >yellow</span> state - learning of this case is in progress
+                                </div>
+                                <div>
+                                    <span
+                                        className={"finished"}
+                                        style={{color: "black"}}
+                                    >green</span> state - learning of this case is finished
                                 </div>
                             </div>
                         </PopupWindow>
