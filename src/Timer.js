@@ -315,7 +315,71 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
     }
 
     function giveReversedSequence(sequence) {
-        const moves = removeRotations(replaceWideMoves(sequence.split(" ")));
+        function giveReversedMove(move) {
+            return (move[1] === "2" ? (move) : (move[1] === "'" ? (move[0]) : (move[0] + "'")));
+        }
+
+        function replaceWideMoves(array) {
+            const changes = new Map ([
+                ["r", ["L", "x"]],
+                ["l", ["R", "x'"]],
+                ["u", ["D", "y"]],
+                ["d", ["U", "y'"]],
+                ["f", ["B", "z"]],
+                ["b", ["F", "z'"]],
+                ["M", ["r'", "R"]],
+                ["E", ["u'", "U"]],
+                ["S", ["f", "F'"]],
+            ]);
+            const n = array.length;
+            for(let i=n-1; i>=0; i--) {
+                const currentLetter = array[i];
+                if ((Array.from(changes.keys())).includes(currentLetter[0])) {
+                    let forReplace = changes.get(currentLetter[0]);
+                    if (currentLetter[1] === "'") {
+                        forReplace = [giveReversedMove(forReplace[0]), giveReversedMove(forReplace[1])];
+                    } else if (currentLetter[1] === "2") {
+                        forReplace = [forReplace[0][0] + "2", forReplace[1][0] + "2"];
+                    }
+                    array = array.slice(0, i).concat(forReplace).concat(array.slice(i + 1).join(" ").split(" "));
+                }
+            }
+            return array;
+        }
+
+        function removeRotations(array) {
+            const rotations = new Map([
+                ["x", ["F", "D", "B", "U"]],
+                ["y", ["F", "R", "B", "L"]],
+                ["z", ["U", "L", "D", "R"]],
+            ]);
+            const n = array.length;
+            for(let i=n-1; i>=0; i--) {
+                const currentLetter = array[i];
+                if ((Array.from(rotations.keys())).includes(currentLetter[0])) {
+                    let letters = rotations.get(currentLetter[0])
+                    if (currentLetter[1] === "'") {
+                        letters = letters.slice().reverse();
+                    }
+                    const l1 = letters[0];
+                    const l2 = letters[1];
+                    const l3 = letters[2];
+                    const l4 = letters[3];
+                    array = array.slice(0, i).concat(array.slice(i + 1).join(" ").replace(new RegExp(l1,"g"), "%")
+                        .replace(new RegExp(l4,"g"), l1).replace(new RegExp(l3,"g"), l4)
+                        .replace(new RegExp(l2,"g"), l3).replace(/%/g, l2).split(" "));
+                    if (currentLetter[1] === "2") {
+                        array = array.slice(0, i).concat(array.slice(i).join(" ")
+                            .replace(new RegExp(l1,"g"), "%").replace(new RegExp(l4,"g"), l1)
+                            .replace(new RegExp(l3,"g"), l4).replace(new RegExp(l2,"g"), l3)
+                            .replace(/%/g, l2).split(" "));
+                    }
+                }
+            }
+            return array;
+        }
+
+        const moves = removeRotations(replaceWideMoves(replaceWideMoves(sequence.split(" "))));
 
         let reversedSequence = "";
         for (let i=0; i<moves.length; i++) {
@@ -330,66 +394,6 @@ export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLengt
             }
         }
         return reversedSequence;
-    }
-
-    function replaceWideMoves(array) {
-        const changes = new Map ([
-            ["r", ["L", "x"]],
-            ["l", ["R", "x'"]],
-            ["u", ["D", "y"]],
-            ["d", ["U", "y'"]],
-            ["f", ["B", "z"]],
-            ["b", ["F", "z'"]],
-            ["M", ["R", "L'"]],
-            ["E", ["U", "D'"]],
-            ["S", ["B", "F'"]],
-        ]);
-        const n = array.length;
-        for(let i=n-1; i>=0; i--) {
-            const currentLetter = array[i];
-            if ((Array.from(changes.keys())).includes(currentLetter[0])) {
-                let forReplace = changes.get(currentLetter[0]);
-                if (currentLetter[1] === "'") {
-                    forReplace = [forReplace[0] + "'", (forReplace[1][1] ? forReplace[1][0] : forReplace[1] + "'")];
-                } else if (currentLetter[1] === "2") {
-                    forReplace = [forReplace[0] + "2", forReplace[1] + "2"];
-                }
-                array = array.slice(0, i).concat(forReplace).concat(array.slice(i + 1).join(" ").split(" "));
-            }
-        }
-        return array;
-    }
-
-    function removeRotations(array) {
-        const rotations = new Map([
-            ["x", ["F", "D", "B", "U"]],
-            ["y", ["F", "R", "B", "L"]],
-            ["z", ["U", "L", "D", "R"]],
-        ]);
-        const n = array.length;
-        for(let i=n-1; i>=0; i--) {
-            const currentLetter = array[i];
-            if ((Array.from(rotations.keys())).includes(currentLetter[0])) {
-                let letters = rotations.get(currentLetter[0])
-                if (currentLetter[1] === "'") {
-                    letters = letters.slice().reverse();
-                }
-                const l1 = letters[0];
-                const l2 = letters[1];
-                const l3 = letters[2];
-                const l4 = letters[3];
-                array = array.slice(0, i).concat(array.slice(i + 1).join(" ").replace(new RegExp(l1,"g"), "%")
-                    .replace(new RegExp(l4,"g"), l1).replace(new RegExp(l3,"g"), l4)
-                    .replace(new RegExp(l2,"g"), l3).replace(/%/g, l2).split(" "));
-                if (currentLetter[1] === "2") {
-                    array = array.slice(0, i).concat(array.slice(i).join(" ")
-                        .replace(new RegExp(l1,"g"), "%").replace(new RegExp(l4,"g"), l1)
-                        .replace(new RegExp(l3,"g"), l4).replace(new RegExp(l2,"g"), l3)
-                        .replace(/%/g, l2).split(" "));
-                }
-            }
-        }
-        return array;
     }
 
     function updateScramble() {
