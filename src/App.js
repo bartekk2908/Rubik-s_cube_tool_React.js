@@ -227,7 +227,7 @@ export default function App() {
                                     <span
                                         className={"not-being-learned"}
                                         style={{color: "black"}}
-                                    >white</span> state - this case wasn't being learned yet
+                                    >white</span> state - this case is not known yet
                                 </div>
                                 <div>
                                     <span
