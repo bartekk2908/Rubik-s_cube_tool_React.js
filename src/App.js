@@ -2,7 +2,7 @@ import {useState} from "react";
 import './App.css';
 import * as XLSX from "xlsx";
 
-import {Timer} from "./Timer";
+import {TimerTab} from "./TimerTab";
 import {AlgorithmsTab} from "./AlgorithmsTab";
 import {useLiveQuery} from "dexie-react-hooks";
 import {db} from "./db";
@@ -247,7 +247,7 @@ export default function App() {
                 </div>
             ) : ""}
             {moduleState === 0 ? (
-                <Timer
+                <TimerTab
                     holdingSpaceTime={500}
                     determineVisibilityFunc={determineVisibility}
                     scrambleLength={20}

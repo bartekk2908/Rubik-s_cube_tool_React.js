@@ -9,7 +9,7 @@ import {db} from "./db";
 import sound1 from "./sounds/notification-sound-1.mp3"; //https://pixabay.com/sound-effects/
 import sound2 from "./sounds/notification-sound-2.mp3";
 
-export function Timer({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict, outerPopupOpened, settings }) {
+export function TimerTab({ holdingSpaceTime, determineVisibilityFunc, scrambleLength, results, algorithmsData, trainingStateDict, outerPopupOpened, settings }) {
     const [scrambleSequence, setScrambleSequence] = useState(generateClassicScrambleSequence(scrambleLength));
     const [timerTab, setTimerTab] = useState(0);
     // 0 - Normal
