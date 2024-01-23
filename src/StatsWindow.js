@@ -1,6 +1,6 @@
 import {formatTime, averageOfLastX, giveBest} from "./functions";
 
-export function Stats({ results, timerTab, algorithmsData }) {
+export function StatsWindow({ results, timerTab, algorithmsData }) {
     const times = results[timerTab]?.map((result) => {
         if (result.dnf) {
             return Infinity;

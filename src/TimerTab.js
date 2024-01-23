@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 
 import {ScrambleField} from "./ScrambleField";
-import {Stats} from "./Stats";
-import {ResultsList} from "./ResultsList";
+import {StatsWindow} from "./StatsWindow";
+import {ResultsListWindow} from "./ResultsListWindow";
 import {formatTime, giveListOfChosenAlgorithms} from "./functions";
 import {db} from "./db";
 
@@ -448,14 +448,14 @@ export function TimerTab({ holdingSpaceTime, determineVisibilityFunc, scrambleLe
             {timerState <= 0 ? (
                 <div className={"under-timer-container"}>
                     {resultListVisible ? (
-                        <ResultsList
+                        <ResultsListWindow
                             results={results}
                             timerTab={timerTab}
                             outerPopupOpened={outerPopupOpened}
                         />
                     ) : ""}
                     {statsVisible ? (
-                        <Stats
+                        <StatsWindow
                             results={results}
                             timerTab={timerTab}
                             algorithmsData={algorithmsData}

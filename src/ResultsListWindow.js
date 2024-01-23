@@ -4,7 +4,7 @@ import {Result} from "./Result";
 import {db} from "./db";
 import {PopupWindow} from "./PopupWindow";
 
-export function ResultsList({ results, timerTab, outerPopupOpened }) {
+export function ResultsListWindow({ results, timerTab, outerPopupOpened }) {
     const [deletePopupOpened, setDeletePopupOpened] = useState(false);
 
     // After click in 'X' button reset saved data of solving or training
