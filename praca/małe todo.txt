@@ -1,10 +1,9 @@
 
-testy intalacji na innym użądzeniu
-instalacja
-zakończenie wnioski i dalszy rozwój
-
 implementacja
 opis narzędzia
+
+ocena promotora
+ocena rodziców
 
 testy
 
@@ -12,13 +11,12 @@ spis rysunków
 spis tabel
 załączniki
 
+źródła literaturowe
+
+zakończenie wnioski i dalszy rozwój poprawić
 projekt interfejsu???
 odzwierciedlenie procedury układania na zawodach???
 
-źródła literaturowe
-
-ocena promotora
-ocena rodziców
 
 upewnienie się co do wymagań itd
 

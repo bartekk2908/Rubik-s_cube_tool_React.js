@@ -288,10 +288,10 @@ export function TimerTab({ holdingSpaceTime, determineVisibilityFunc, scrambleLe
     function generateAlgorithmScrambleSequence() {
         let wantedStates = [];
         if ((settings.get("learningGroup") ?? true) || (settings.get("finishedGroup") ?? false )) {
-            if (settings.get("learningGroup")) {
+            if (settings.get("learningGroup") ?? true) {
                 wantedStates = wantedStates.concat([1]);
             }
-            if (settings.get("finishedGroup")) {
+            if (settings.get("finishedGroup") ?? false) {
                 wantedStates = wantedStates.concat([2]);
             }
         } else {
