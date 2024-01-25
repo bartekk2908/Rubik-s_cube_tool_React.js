@@ -11,7 +11,7 @@ export function AlgorithmFace({piecesScheme, colorOnTop, colorOnFront}) {
         5: giveOppositeColor(giveColorOnLeft(colorOnTop, colorOnFront)),
         6: giveColorOnLeft(colorOnTop, colorOnFront),
     };
-    // 0 - grey color,
+    // 0 - any color
     // 1 - top face color
     // 2 - bottom face color
     // 3 - front face color
