@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rubiks-cube-tool/static/css/main.c7c15ec5.css",
-    "main.js": "/rubiks-cube-tool/static/js/main.21624b3d.js",
-    "static/media/notification-sound-2.mp3": "/rubiks-cube-tool/static/media/notification-sound-2.b98d733d4bc5cc19eb87.mp3",
-    "static/media/notification-sound-1.mp3": "/rubiks-cube-tool/static/media/notification-sound-1.d73a48979f61f8154e1c.mp3",
-    "index.html": "/rubiks-cube-tool/index.html",
-    "main.c7c15ec5.css.map": "/rubiks-cube-tool/static/css/main.c7c15ec5.css.map",
-    "main.21624b3d.js.map": "/rubiks-cube-tool/static/js/main.21624b3d.js.map"
+    "main.css": "/Rubik-s_cube_tool_React.js/static/css/main.c7c15ec5.css",
+    "main.js": "/Rubik-s_cube_tool_React.js/static/js/main.896a57ee.js",
+    "static/media/notification-sound-2.mp3": "/Rubik-s_cube_tool_React.js/static/media/notification-sound-2.b98d733d4bc5cc19eb87.mp3",
+    "static/media/notification-sound-1.mp3": "/Rubik-s_cube_tool_React.js/static/media/notification-sound-1.d73a48979f61f8154e1c.mp3",
+    "index.html": "/Rubik-s_cube_tool_React.js/index.html",
+    "main.c7c15ec5.css.map": "/Rubik-s_cube_tool_React.js/static/css/main.c7c15ec5.css.map",
+    "main.896a57ee.js.map": "/Rubik-s_cube_tool_React.js/static/js/main.896a57ee.js.map"
   },
   "entrypoints": [
     "static/css/main.c7c15ec5.css",
-    "static/js/main.21624b3d.js"
+    "static/js/main.896a57ee.js"
   ]
 }
