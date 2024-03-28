@@ -1,7 +1,8 @@
 
-- testy na nowej przeglądarce
-- testy instalacji na innym sprzęcie itd
+- github pages
+- readme
+- thesis ?
 
-- kiedyś:
+future:
 - sortowanie tabelki
 - wizualizacja kostki
