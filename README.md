@@ -3,14 +3,13 @@
 
 ## Usage
 
-You can try this tool [here]().
+You can try this tool [here](https://bartekk2908.github.io/Rubik-s_cube_tool_React.js/).
 
 
 ## Features
 
-- a
-- b
-- c
+- basic speedcube timer functionalities
+- list of OLL and PLL algorithms
 
 
 ## User Interface
